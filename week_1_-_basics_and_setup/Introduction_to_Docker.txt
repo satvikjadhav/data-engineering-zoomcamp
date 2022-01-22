@@ -18,3 +18,5 @@ Why should we care about docker?
 - Running pipleines on the cloud using this docker image of the data pipeline
 - Serverless (AWS Lambda, Google Functions)
 - Spark
+
+Running postgressql in docker
