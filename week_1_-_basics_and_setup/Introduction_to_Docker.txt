@@ -1,0 +1,20 @@
+Introduction to Docker - Notes
+
+What is docker? -- IBM defintion
+Docker is an open source containerization platform. It enables developers to package applications into containers—standardized executable components combining application source code with the operating system (OS) libraries and dependencies required to run that code in any environment
+
+Containerization -- IBM defintion
+Containerization is the packaging of software code with just the operating system (OS) libraries and dependencies required to run the code to create a single lightweight executable—called a container—that runs consistently on any infrastructure
+
+What is a data pipeline?
+Process or service that takes in data and outputs more data in our desired format
+
+We can then bundle up all the dependecies that our data pipeline needs in order to run as a "contianer" and then be able to run it in another computer or another operating system. 
+
+Why should we care about docker?
+- Reproducibility
+- Local experiments
+- Integration tests (CI/CD) - General software engineering best practices
+- Running pipleines on the cloud using this docker image of the data pipeline
+- Serverless (AWS Lambda, Google Functions)
+- Spark
