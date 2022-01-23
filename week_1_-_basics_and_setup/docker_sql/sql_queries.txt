@@ -1,0 +1,41 @@
+Sql Queries used for the Week 1 Homework
+
+3. How many taxi trips were there on January 15?
+Answer:
+
+select count(*)
+from yellow_taxi_data
+where date(tpep_pickup_datetime) = '2021-01-15'
+
+4. On which day it was the largest tip in January? (note: it's not a typo, it's "tip", not "trip")
+Answer:
+
+select tpep_pickup_datetime, tpep_dropoff_datetime
+from yellow_taxi_data
+where tip_amount = (select max(tip_amount) from yellow_taxi_data)
+
+5. Most popular destination
+Answer:
+
+select zd."Zone", count(*)
+from yellow_taxi_data as ytd
+left join zones as z
+on z."LocationID" = ytd."PULocationID"
+left join zones as zd
+on zd."LocationID" = ytd."DOLocationID"
+where z."Zone" = 'Central Park'
+and date(tpep_pickup_datetime) = '2021-01-14'
+group by 1
+order by 2 desc
+
+6. Most expensive route
+Answer:
+
+select z."Zone" as pickup, zd."Zone" as dropoff, avg(ytd.total_amount)
+from yellow_taxi_data as ytd
+left join zones as z
+on z."LocationID" = ytd."PULocationID"
+left join zones as zd
+on zd."LocationID" = ytd."DOLocationID"
+group by 1, 2
+order by 3 desc
