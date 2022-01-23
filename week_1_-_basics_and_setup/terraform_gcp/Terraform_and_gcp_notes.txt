@@ -1,0 +1,40 @@
+Introduction
+	-What is Terraform?
+	-open-source tool by HashiCorp, used for provisioning infrastructure resources
+	-supports DevOps best practices for change management
+	-Managing configuration files in source control to maintain an ideal provisioning state for testing and production environments
+	-Provides a consistent CLI workflow to manage hundreds of cloud services.
+	-Manage infra with config files
+What is IaC?
+	-Infrastructure-as-Code
+	-build, change, and manage your infrastructure in a safe, consistent, and repeatable way by defining resource configurations that you can version, reuse, and share.
+	-Like a git version control system but for infrastructure
+Some advantages
+	-Infrastructure lifecycle management
+	-Build, change, and destroy infrastructure with Terraform.
+	-Version control commits
+	-Very useful for stack-based deployments, and with cloud providers such as AWS, GCP, Azure, K8S…
+	-State-based approach to track resource changes throughout deployments
+
+Most important part about terraform is the terraform state.
+Which allows us to track resource changes throughout the deployment
+
+To use gcloud do the following steps:
+
+1. Download gcloud SDK
+2. install it via the install.sh or install.bat files
+3. If in windows add a path to your python folder
+4. Create a variable to store your service account key that you generated
+	- export GOOGLE_APPLICATION_CREDENTIALS=~/.gc/ny-rides.json
+5. Now authenticate:
+	gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+6. or we can use this as well:
+	gcloud auth application-default login
+
+Now we create two infra modules in GCP (Google Cloud Platform)with Terraform
+	- Google Cloud Storage: Data Lake
+	- BigQueyr: Data Warehouse
+
+In production we would create custom roles in GCP
+
+Creating GCP Infra with Terraform
