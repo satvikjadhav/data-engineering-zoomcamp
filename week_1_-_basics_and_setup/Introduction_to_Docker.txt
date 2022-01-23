@@ -107,3 +107,38 @@ Docker-Compose
 
 -> A way to put together multiple services in one config file. 
 
+Instead of running multiple docker commands with docker configurations in them.
+We can create one yml file with the config information. 
+For this we will use docker compose. 
+
+This is how a docker-compose file would look like in our case:
+
+services:
+  pgdatabase:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=ny_taxi
+    volumes:
+      - "./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "8080:80"
+
+We don't need to define a network for this as the images here automatically become part of the same network
+
+Run it:
+docker-compose up
+
+Run in detached mode:
+docker-compose up -d
+
+Shutting it down:
+docker-compose down
