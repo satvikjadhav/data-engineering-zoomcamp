@@ -118,4 +118,41 @@ Once we have access to our VM, we now need to configure it.
 					- pip install -U mycli
 
 	9. How to access the postgres port
-		- 
+		- postgres from docker is running on the port 5432
+		- We would like to forward this port to our local machine so that we can interact with postgres instance locally
+		- in visual studios, we can use ctrl + ~ to access  the ports section
+			- and click forward port button and forward 5432 and 8080 ports
+			- we can now access the postgres instance from our local machine
+			- and we can access pgadmin via the web browser  
+
+	10. How to start jupyter
+		- We would need to forward port 8888 to be able to access jupyter notbook website
+		- we would also need to download the data (rides csv files) into our vm
+			- wget url_to_csv_files
+
+	11. Installing terraform
+		- https://www.terraform.io/downloads
+		- select linux
+		- we want to just download the binary (but we can use the package manager too)
+		- Linux binary download: amd64, copy the url
+		- and download it into our bin directory in VM
+		- Since this is a zip file, we want to unzip it
+			- install unzip: sudo apt-get install unzip
+			- unzip terraform_1.1.4_linux_amd64.zip
+	
+	12. Uploading files to VM
+		- if we want to use terraform in our vm, we would require our google cloud credentials
+		- to upload the credentials file we can use Secure File Transfer Protocol (SFTP)
+		- command: sftp de-test (our VM's name) <- using this to connect to our vm
+		- we can make a directory called .gc where we will put the file
+			- mkdir .gc
+		- put credential_file_name.json
+
+	13. Setting up gcloud in our VM
+		- create an env variable called GOOGLE_APPLICATION_CREDENTIALS
+			- export GOOGLE_APPLICATION_CREDENTIALS=~/.gc/credentials_file_name.json
+		- we now use this json file to authenticate our cli
+		- gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+		- we can now use terraform commands to initiate GCP resources, and destroy them
+		- project id is our project id from gcp
+	
