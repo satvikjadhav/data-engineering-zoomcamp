@@ -1,0 +1,27 @@
+Converting the data ingestion script for loading data to Postgres to an Airflow DAG
+
+Step by step take the workflow/data pipeline we created in week one (data ingestion pipeline), and put that inside Airflow as a DAG file
+	- Steps taken to convert the ingest_data.py script into a DAG file
+
+This will be split into two steps:
+	1. Get the csv files
+	2. Ingest this csv files into our postgres database
+
+We can do this both in our local/personal computer or in a VM on cloud
+
+Plan:
+
+	1. Start with the docker-compose we had created in week_2/airflow folder
+	2. Change the dag mappings
+		- Here we would go in the "volumes:" section of the docker-compose file
+		- and change ./dags:/opt/airflow/dags to ./dags_local:/opt/airflow/dags
+			- the ":" after ./dags means we are mapping the file path /opt/airflow/dags to the ./dags file
+
+	3. Make them run monthly
+	4. Create a bash operator, and pass the params: ('execution_date.strftime(\'%Y-#m\')')
+	5. Download the data using the code we had already written in previous Airflow activities in week_2
+	6. Put the ingest script to Airflow
+	7. Modify dependencies
+		- Add the ingest script dependencies here
+	8. Put the old docker-compose file in the same network
+
