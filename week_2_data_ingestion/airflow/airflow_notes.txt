@@ -62,6 +62,10 @@ Airflow Setup via Docker
 	- now that the initialization has been done, we now initiate the other services such as the back-end, scheduler, worker and the rest. 
 		- docker-compose up
 
+	- To immediately stop/kill all running Docker containers by using the following command:
+		- docker kill $(docker container ls -q)
+		- We can also use "stop" instead of "kill" to gracefully stop the running containers
+
 6. Docker Compose:
 
 	- Back in your docker-compose.yaml:

@@ -48,7 +48,7 @@ Once we have access to our VM, we now need to configure it.
 			User satvikjadhav
 			IdentityFile ~/.ssh/gpc
 
-			- Host: same name as our VM
+			- Host: same name as our VM instance name
 			- HostName: External IP
 			- User: Name we used to create the SSH key
 			- IdentityFile: where the file is stored
