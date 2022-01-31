@@ -25,3 +25,33 @@ Plan:
 		- Add the ingest script dependencies here
 	8. Put the old docker-compose file in the same network
 
+We now create our first empty dag file in our new folder (dags_local): data_ingestion_local.py
+
+We should ideally give our task IDs longer names -- more descriptive of what the task is doing / trying too achieve
+
+When saving file in Airflow via wget, we cannot just save it in default location as that is temporary. 
+After the task is run, all the files in that temp folder will deleted. 
+So avoid this, we use something like: path_to_local_home/output.csv
+The path to local home can be taken via using the OS module
+
+The L flag in "curl -sSL" is for making curl follow a redirect link
+
+Now we want to check where the file was downloaded in our Airflow
+
+	1. We first list out all our docker processes: docker ps
+	2. We are interested in the airflow-worker process here
+	3. We then enter the following command:
+		- docker exec -it airflow-worker-container_id bash
+			- by running this command we can now enter that container and check out the downloads and everything
+		- wc -l output.csv 
+			- command to get the total rows in a csv file
+
+The problem with using output.csv as a name:
+
+	1. Not a good name when we are running multiple DAGs in parallel, and they are downloading files
+
+We want each task to write to its own output file and have unique names. 
+
+Now, we want to get the execution date in YYY-MM format and put that in our URL.
+
+By doing this the URL will get updated with the YYY-MM of the task execution date and download the respective csv file for that month
