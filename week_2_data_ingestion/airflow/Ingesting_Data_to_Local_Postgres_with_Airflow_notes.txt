@@ -55,3 +55,45 @@ We want each task to write to its own output file and have unique names.
 Now, we want to get the execution date in YYY-MM format and put that in our URL.
 
 By doing this the URL will get updated with the YYY-MM of the task execution date and download the respective csv file for that month
+
+We are able to download month wise files, which is what we wanted
+
+Now, let's put the ingestion script (ingest_data.py) from week 1 to Airflow
+
+	1. We copy the ingest_data.py script from week one into dags_local
+	2. Modify the script; we don't need the os command as well as the main namespace
+	3. We first run the script using just the create_engine function to check we are able to connect to postgres
+	4. To use pandas or any other library, we also need to have it installed on our airflow workers
+
+	5. To add the modules to our workers, we can specify the required modules in the requirements.txt file or add in the Dockerfile
+		- RUN pip install --no-cache-dir pandas sqlalchemy psycopg2-binary
+			- [--no-cache-dir] means that it will save not save to the cache
+			- binary means that it will download the binary file and install using that
+
+	6. Now that we have added the new modules, we need to build the docker containers again
+		- docker-compose build
+
+	7. Now we need to import our new ingest function from another script to our DAG file
+
+	8. Now we need to pass parameters into our callable
+
+	9. Previously we were passing the arguments via command line, bu this time we can the .env file
+		- PG_HOST=pgdatabase
+		- PG_USER=root
+		- PG_PASSWORD=root
+		- PG_PORT=5432
+		- PG_DATABASE=ny_taxi
+
+	10. Now we need to pass this information to workers
+		- In docker-compose, in the environment tag
+		- We add the above env variables here as well
+		- PG_HOST: "${PG_HOST}"
+	    - PG_USER: "${PG_USER}"
+	    - PG_PASSWORD: "${PG_PASSWORD}"
+	    - PG_PORT: "${PG_PORT}"
+	    - PG_DATABASE: "${PG_DATABASE}"
+	    - What this means is that the worker will have the above environmental variables which in turn will be read from the environmental variable of our host machine: PG_HOST: "${PG_HOST}"
+	    - And these environmental variables will come from the .env file
+	    - And because of the "&airflow-common-env" all airflow things will get it
+
+    11. 
