@@ -13,6 +13,9 @@ from airflow.operators.python import PythonOperator
 import pyarrow.csv as pv
 import pyarrow.parquet as pq
 
+# Importing our ingest function and script
+from ingest_script import ingest_callable
+
 #Paths
 path_to_local_home = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 
@@ -37,9 +40,12 @@ with local_workflow:
         # bash_command = 'echo "{{execution_date.strftime(\'%Y-%m\')}}"'
     )
 
-    ingest_task = BashOperator(
+    ingest_task = PythonOperator(
         task_id = 'ingest',
-        bash_command = f'ls {path_to_local_home}'
+        python_callable = ingest_callable,
+        op_kwargs = {
+
+        }
     )
 
     wget_task >> ingest_task
