@@ -96,4 +96,33 @@ Now, let's put the ingestion script (ingest_data.py) from week 1 to Airflow
 	    - And these environmental variables will come from the .env file
 	    - And because of the "&airflow-common-env" all airflow things will get it
 
-    11. 
+    11. Now we add the following in our data_ingestion_local script:
+    	- PG_HOST = os.getenv('PG_HOST')
+		- PG_USER = os.getenv('PG_USER')
+		- PG_PASSWORD = os.getenv('PG_PASSWORD')
+		- PG_PORT = os.getenv('PG_PORT')
+		- PG_DATABASE = os.getenv('PG_DATABASE')
+
+	12. Now, how do we connect two different docker-compose yaml files? 
+		- We have one in week_1 and another one in week_2
+		- First get the network name by: docker network ls and copy the network name
+		- Now add the following in the week_1 yaml file:
+			networks:
+			  airflow (we can put this to whatever name we want):
+			    external:
+			      name: my_network_name
+		- and finally, add networks: airflow in the pgdatabase service
+        - By doing this we can add the airflow network that is ran/created by our week_2 docker-compose yaml file
+
+    13. For each month, we can have a separate table name
+    	- TABLE_NAME_TEMPLATE = 'yellow_taxi_{{ execution_date.strftime(\'%Y_%m\') }}'
+
+    14. Reasons why we don't want to create one big table with all the csv files in it
+    	- Idempotentcy
+    		- All the tasks in airflow should be idempotent 
+    		- The idea is it doesn't matter if we run the task once or 5 times or we ran it after it broke once
+    		- After a successful run, we get our database in a state that is consistent
+
+    15. This setup is okay for local testing, but in reality we would have: 
+    	- Have a database running in the cloud
+    	- For example, bigQuery or AWS Athena. And we insert our data there
