@@ -26,9 +26,11 @@ PG_PORT = os.getenv('PG_PORT')
 PG_DATABASE = os.getenv('PG_DATABASE')
 
 local_workflow = DAG(
-    "LocalIngestionDag",
+    "data_ingestion_local",
+    description="Ingesting data into a local postgres database",
     schedule_interval="0 6 2 * *",
-    start_date=datetime(2021, 1, 1)
+    start_date=datetime(2021, 1, 1), 
+    max_active_runs=1
 )
 
 url = 'https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2021-01.csv'
@@ -43,7 +45,7 @@ with local_workflow:
 
     wget_task = BashOperator(
         task_id = 'wget',
-        bash_command = f'curl -sSL {url} > {OUTPUT_FILE_TEMPLATE}'
+        bash_command = f'curl -sSLf {url} > {OUTPUT_FILE_TEMPLATE}'
         # bash_command = 'echo "{{execution_date.strftime(\'%Y-%m\')}}"'
     )
 
@@ -59,4 +61,9 @@ with local_workflow:
                          csv_name=OUTPUT_FILE_TEMPLATE)
     )
 
-    wget_task >> ingest_task
+    clean_task = BashOperator(
+        task_id = 'clean',
+        bash_command = f'rm {OUTPUT_FILE_TEMPLATE}'
+    )
+
+    wget_task >> ingest_task >> clean_task
