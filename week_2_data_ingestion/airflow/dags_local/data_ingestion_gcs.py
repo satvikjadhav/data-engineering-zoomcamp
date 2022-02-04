@@ -26,18 +26,11 @@ BUCKET = os.environ.get("GCP_GCS_BUCKET")
 BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'trips_data_all')
 
 
-PG_HOST = os.getenv('PG_HOST')
-PG_USER = os.getenv('PG_USER')
-PG_PASSWORD = os.getenv('PG_PASSWORD')
-PG_PORT = os.getenv('PG_PORT')
-PG_DATABASE = os.getenv('PG_DATABASE')
-
-
 local_workflow = DAG(
     "data_ingestion_gcs",
     description="Ingesting data into a google cloud storage and bigQuery",
     schedule_interval="0 6 2 * *",
-    start_date=datetime(2021, 1, 1), 
+    start_date=datetime(2021, 1, 1),
     max_active_runs=1
 )
 
@@ -46,10 +39,18 @@ url = 'https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2021-01.csv'
 
 # URL Templating
 URL_PREFIX = 'https://s3.amazonaws.com/nyc-tlc/trip+data'
+
+# URL to download the dataset
 URL_TEMPLATE = URL_PREFIX + '/yellow_tripdata_{{execution_date.strftime(\'%Y-%m\')}}'
+
+# Output file path + name. Using jinga templating to give it the same name as the date of execution
 OUTPUT_FILE_TEMPLATE = path_to_local_home + '/output_{{execution_date.strftime(\'%Y-%m\')}}.csv'
+
+# Table name that we will be using in GCP (for storing the the file in Google Cloud Storage, and create a table in Google BigQuery)
 TABLE_NAME_TEMPLATE = 'yellow_taxi_{{ execution_date.strftime(\'%Y_%m\') }}'
-PARQUET_FILE = f'{OUTPUT_FILE_TEMPLATE}'.replace('.csv', '.parquet')
+
+# Parquet file name that we store in our local machine
+PARQUET_FILE_LOCAL = f'{OUTPUT_FILE_TEMPLATE}'.replace('.csv', '.parquet')
 
 
 # Functions
@@ -84,13 +85,14 @@ def upload_to_gcs(bucket, object_name, local_file):
 
 with local_workflow:
 
-
+    # Task to download the data set
     wget_task = BashOperator(
         task_id = 'download_dataset',
         bash_command = f'curl -sSLf {url} > {OUTPUT_FILE_TEMPLATE}'
         # bash_command = 'echo "{{execution_date.strftime(\'%Y-%m\')}}"'
     )
 
+    # Task to convert the downloaded csv file to parquet file format
     format_to_parquet_task = PythonOperator(
         task_id="format_to_parquet_task",
         python_callable=format_to_parquet,
@@ -99,16 +101,18 @@ with local_workflow:
         },
     )
 
+    # Task to upload the local file to google cloud storage
     local_to_gcs_task = PythonOperator(
         task_id="local_to_gcs_task",
         python_callable=upload_to_gcs,
         op_kwargs={
             "bucket": BUCKET,
             "object_name": f"raw/{TABLE_NAME_TEMPLATE}.parquet",
-            "local_file": f"{path_to_local_home}/{PARQUET_FILE}",
+            "local_file": f"/{PARQUET_FILE_LOCAL}",
         },
     )
 
+    # Task to create a table in Google BigQuery using the uploaded parquet file as source
     bigquery_external_table_task = BigQueryCreateExternalTableOperator(
         task_id="bigquery_external_table_task",
         table_resource={
@@ -119,14 +123,15 @@ with local_workflow:
             },
             "externalDataConfiguration": {
                 "sourceFormat": "PARQUET",
-                "sourceUris": [f"gs://{BUCKET}/raw/{PARQUET_FILE}"],
+                "sourceUris": [f"gs://{BUCKET}/raw/{TABLE_NAME_TEMPLATE}.parquet"],
             },
         },
     )
 
+    # Task to clean the csv and parquet files in our local machine
     clean_task = BashOperator(
         task_id = 'clean_local_files',
-        bash_command = f'rm {PARQUET_FILE} {OUTPUT_FILE_TEMPLATE}'
+        bash_command = f'rm {PARQUET_FILE_LOCAL} {OUTPUT_FILE_TEMPLATE}'
     )
 
     wget_task >> format_to_parquet_task >> local_to_gcs_task >> bigquery_external_table_task >> clean_task
