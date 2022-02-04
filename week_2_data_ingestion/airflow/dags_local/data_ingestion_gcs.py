@@ -93,8 +93,8 @@ with local_workflow:
     )
 
     # Task to convert the downloaded csv file to parquet file format
-    format_to_parquet_task = PythonOperator(
-        task_id="format_to_parquet_task",
+    file_type_change = PythonOperator(
+        task_id="format_to_parquet",
         python_callable=format_to_parquet,
         op_kwargs={
             "src_file": f"{OUTPUT_FILE_TEMPLATE}",
@@ -102,8 +102,8 @@ with local_workflow:
     )
 
     # Task to upload the local file to google cloud storage
-    local_to_gcs_task = PythonOperator(
-        task_id="local_to_gcs_task",
+    local_to_gcs = PythonOperator(
+        task_id="local_to_gcs",
         python_callable=upload_to_gcs,
         op_kwargs={
             "bucket": BUCKET,
@@ -113,8 +113,8 @@ with local_workflow:
     )
 
     # Task to create a table in Google BigQuery using the uploaded parquet file as source
-    bigquery_external_table_task = BigQueryCreateExternalTableOperator(
-        task_id="bigquery_external_table_task",
+    gcs_to_big_query = BigQueryCreateExternalTableOperator(
+        task_id="gcs_to_big_query",
         table_resource={
             "tableReference": {
                 "projectId": PROJECT_ID,
@@ -134,4 +134,4 @@ with local_workflow:
         bash_command = f'rm {PARQUET_FILE_LOCAL} {OUTPUT_FILE_TEMPLATE}'
     )
 
-    wget_task >> format_to_parquet_task >> local_to_gcs_task >> bigquery_external_table_task >> clean_task
+    wget_task >> file_type_change >> local_to_gcs >> gcs_to_big_query >> clean_task
