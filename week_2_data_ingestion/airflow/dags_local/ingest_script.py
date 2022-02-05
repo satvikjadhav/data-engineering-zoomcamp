@@ -23,9 +23,11 @@ def ingest_callable(user, password, host, port, db, table_name, csv_name):
 
     print("connection established")
 
-    df_iter = pd.read_csv(csv_name, iterator=True, chunksize=100000)
+    # df_iter = pd.read_csv(csv_name, iterator=True, chunksize=100000)
 
-    df = next(df_iter)
+    # df = next(df_iter)
+
+    df = pd.read_csv(csv_name)
 
     df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
     df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
@@ -35,20 +37,20 @@ def ingest_callable(user, password, host, port, db, table_name, csv_name):
     df.to_sql(name=table_name, con=engine, if_exists='append')
 
 
-    while True: 
-        t_start = time()
+    # while True: 
+    #     t_start = time()
 
-        try:
-            df = next(df_iter)
-        except StopIteration:
-            print("completed")
-            break
+    #     try:
+    #         df = next(df_iter)
+    #     except StopIteration:
+    #         print("completed")
+    #         break
 
-        df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
-        df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
+    #     df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
+    #     df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
 
-        df.to_sql(name=table_name, con=engine, if_exists='append')
+    #     df.to_sql(name=table_name, con=engine, if_exists='append')
 
-        t_end = time()
+    #     t_end = time()
 
-        print('inserted another chunk, took %.3f second' % (t_end - t_start))
+    #     print('inserted another chunk, took %.3f second' % (t_end - t_start))
