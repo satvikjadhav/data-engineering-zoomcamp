@@ -31,7 +31,7 @@ local_workflow = DAG(
     description="Ingesting FHV data into a google cloud storage and bigQuery",
     schedule_interval="0 6 2 * *",
     start_date=datetime(2019, 1, 1),
-    end_date=datetime(2019, 12, 1),
+    end_date=datetime(2020, 1, 1),
     max_active_runs=1
 )
 

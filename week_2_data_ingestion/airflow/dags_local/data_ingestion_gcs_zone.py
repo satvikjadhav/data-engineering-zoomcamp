@@ -29,7 +29,8 @@ BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'trips_data_all')
 local_workflow = DAG(
     "data_ingestion_gcs_zone",
     description="Ingesting zone data into a google cloud storage and bigQuery",
-    schedule_interval='@once'
+    schedule_interval='@once',
+    start_date=days_ago(1)
 )
 
 url = 'https://s3.amazonaws.com/nyc-tlc/misc/taxi+_zone_lookup.csv'

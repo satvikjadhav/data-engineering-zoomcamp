@@ -31,7 +31,8 @@ local_workflow = DAG(
     description="Ingesting yellow taxi trip data into a google cloud storage and bigQuery",
     schedule_interval="0 6 2 * *",
     start_date=datetime(2019, 1, 1),
-    max_active_runs=1
+    max_active_runs=1,
+    catchup=True
 )
 
 # URL Templating
