@@ -27,24 +27,26 @@ BIGQUERY_DATASET = os.environ.get("BIGQUERY_DATASET", 'trips_data_all')
 
 
 local_workflow = DAG(
-    "data_ingestion_gcs",
-    description="Ingesting yellow taxi trip data into a google cloud storage and bigQuery",
+    "data_ingestion_gcs_fhv",
+    description="Ingesting FHV data into a google cloud storage and bigQuery",
     schedule_interval="0 6 2 * *",
     start_date=datetime(2019, 1, 1),
+    end_date=datetime(2019, 12, 1),
     max_active_runs=1
 )
+
 
 # URL Templating
 URL_PREFIX = 'https://s3.amazonaws.com/nyc-tlc/trip+data'
 
 # URL to download the dataset
-URL_TEMPLATE = URL_PREFIX + '/yellow_tripdata_{{execution_date.strftime(\'%Y-%m\')}}.csv'
+URL_TEMPLATE = URL_PREFIX + '/fhv_tripdata_{{execution_date.strftime(\'%Y-%m\')}}.csv'
 
 # Output file path + name. Using jinga templating to give it the same name as the date of execution
 OUTPUT_FILE_TEMPLATE = path_to_local_home + '/output_{{execution_date.strftime(\'%Y-%m\')}}.csv'
 
 # Table name that we will be using in GCP (for storing the the file in Google Cloud Storage, and create a table in Google BigQuery)
-TABLE_NAME_TEMPLATE = 'yellow_taxi_{{ execution_date.strftime(\'%Y_%m\') }}'
+TABLE_NAME_TEMPLATE = 'fhv_taxi_{{ execution_date.strftime(\'%Y_%m\') }}'
 
 # Parquet file name that we store in our local machine
 PARQUET_FILE_LOCAL = f'{OUTPUT_FILE_TEMPLATE}'.replace('.csv', '.parquet')
