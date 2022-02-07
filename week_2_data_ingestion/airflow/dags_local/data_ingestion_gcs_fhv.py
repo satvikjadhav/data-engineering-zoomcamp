@@ -32,12 +32,13 @@ local_workflow = DAG(
     schedule_interval="0 6 2 * *",
     start_date=datetime(2019, 1, 1),
     end_date=datetime(2020, 1, 1),
-    max_active_runs=1
+    max_active_runs=1,
+    catchup=True
 )
 
 
 # URL Templating
-URL_PREFIX = 'https://s3.amazonaws.com/nyc-tlc/trip+data'
+URL_PREFIX = 'https://nyc-tlc.s3.amazonaws.com/trip+data'
 
 # URL to download the dataset
 URL_TEMPLATE = URL_PREFIX + '/fhv_tripdata_{{execution_date.strftime(\'%Y-%m\')}}.csv'
