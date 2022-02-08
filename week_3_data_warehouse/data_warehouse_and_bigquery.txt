@@ -1,0 +1,124 @@
+Data Warehouse and BigQuery Notes: https://www.youtube.com/watch?v=jrHljAoD6nM&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=26
+
+Data Warehouse - We will be using BigQuery mainly
+
+Online Analytical Processing (OLAP) vs Online Transaction Processing (OLTP)
+
+- OLAP databases are mainly used by analysts and for analytical purposes
+
+OLTP
+- Purpose
+	- Control and run essential business operations in real time
+
+- Data updates
+	- Short, fast updates initiated by user
+
+- Database design
+	- Normalized databases for efficiency
+
+- Space requirements
+	- Generally small if historical data is archived
+
+- Backup and recovery
+	- Regular backups required to ensure business continuity and meet legal and governance requirements
+
+- Productivity
+	- Increases productivity of end users
+
+- Data View
+	- Lists day-to-day business transactions
+
+- User Examples
+	- Customer-facing personnel, clerks, online shoppers
+
+OLAP
+- Purpose
+	- Plan, solve problems, support decisions, discover hidden insights
+
+- Data updates
+	- Data periodically refreshed with scheduled, long-running batch jobs
+
+- Database design
+	- Denormalized databases for analysis
+
+- Space requirements
+	- Generally large due to aggregating large datasets
+
+- Backup and recovery
+	- Lost data can be reloaded from OLTP database as needed in lieu of regular backups
+
+- Productivity
+	- Increases productivity of business managers, data analysts, and executives
+
+- Data View
+	- Multi-dimensional view of enterprise data
+
+- User Examples
+	- Knowledge workers such as data analysts, business analysts, and executives
+
+
+What is a Data Warehouse?
+
+- It is an OLAP solution
+- Used for reporting and data analysis
+- Generally consists of Meta Data, Summary Data, and Raw Data
+- Data Warehouses can have many sources such as different operational systems, or other databases, or flat file systems
+- Used by data analysts or data scientists
+
+BigQuery
+
+- this is a data warehouse solution by Google
+
+- It is a serverless data warehouse
+	- There are no servers to manage or database software to install
+	- simple plug and play concept
+	- When a company starts its journey in the data storage solution, a huge chunk of time and money is spent on creating, setting up, and maintaining of the servers
+	
+
+- Provides software as well as infrastructure
+	- Has scalability and high-availability 
+	- We can start with few gigabytes of data and scale to petabytes of data without any issues
+
+- Built-in features like:
+	- Machine Learning
+	- Geospatial Analysis
+	- Business Intelligence
+
+- BigQuery maximizes flexibility by separating the compute engine that analyzes your data from your storage
+	- So if needed we can upgrade the compute engine without having to touch our storage solution
+
+- BigQuery generally caches the results
+
+
+- Cost
+	- On Demand Pricing
+		- Based on the amount of data scanned or processed
+		- 1 TB of data processed is $5
+
+	- Flat Rate Pricing
+		- Based on number of pre requested slots
+		- 100 slots -> $2,000/month = 400 TB data processed on demand pricing
+		- We also have to keep in mind about queries competing with each other
+
+- BigQuery infers the data we are trying to import in; column names, their respective types, and if they are nullable or not
+
+- When we use external data to create tables, bigQuery is not able to determine its row size or the table size
+	- This is because the data itself is not inside bigQuery
+
+- Partitions and Clustering
+
+- Partitioning
+	- Generally when we create a dataset, there are columns that are used the most
+	- For example if we want using the date column alot and we partition the table on date column, it can improve the query performance by a lot
+	- This is really good for bigQuery as now bigQuery will only process the data in that specific partition as opposed to processing all of the data
+
+- Clustering
+	- We can also cluster the tables according to a column (For example the "Tags" column in stackoverflow questions table)
+	- example in the queries.sql file
+	- The choice of using which column as for clustering is dependent on how we want to query our data
+
+- Best Practices
+
+- Internals
+
+- Machine Learning in BigQuery
