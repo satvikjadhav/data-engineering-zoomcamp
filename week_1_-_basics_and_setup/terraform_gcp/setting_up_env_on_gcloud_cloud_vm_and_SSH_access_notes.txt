@@ -97,7 +97,7 @@ Once we have access to our VM, we now need to configure it.
 		- Now we want to make this visible not just in the bin directory but also in any directory
 			- using nano .bashrc file to open bashrc file
 			- now we will add the bin directory to our path
-			- export PATH =
+			- export PATH="${HOME}/bin:${PATH}"
 			- Buy doing this we can run docker-compose from anywhere
 		
 		- now we go in our docker_sql file in our repo
