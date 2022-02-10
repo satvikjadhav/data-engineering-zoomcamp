@@ -119,6 +119,96 @@ BigQuery
 
 - Best Practices
 
+We are generally concerned with cost reduction or improving query performance
+
+1. Cost Reduction
+	- Avoid the use of SELECT * queries
+		- BigQuery stores data in a columnar storage format, so its better to query specific columns
+	- Price your queries before running them
+	- Use clustered or partitioned tables
+	- Use streaming inserts with caution
+	- Materialize query results into different stages
+
+2. Query Performance
+	- Filter on partitioned columns
+	- Denormalized data
+	- Use nested or repeated columns
+		- This will help in denormalizing our data
+	- Use external data sources appropriately
+		- Might incur more cost while reading from google cloud storage for example
+	- Don't use it, in case you want a high query performance
+	- Reduce data before using a JOIN clause
+	- Do not treat WITH clauses as prepared statements
+	- Avoid over sharding tables
+	- Avoid JavaScrip user-defined functions
+	- Use approximate aggregation functions (HyperLogLog++)
+	- Order Last, for query operations to maximize performance
+	- Optimize your join patterns
+	- As a best practice
+		- Place the table with the largest number of rows first
+		- followed by the table with the fewest rows
+		- Then place the remaining tables by decreasing size
+		- Reason for this is:
+			- If we place the large table first, it will get distributed evenly
+			- And the second table will be broadcasted to all the nodes
+
+
 - Internals
+
+High level architecture picture of bigQuery is in the pdf file
+
+Knowing the internals of a data warehouse solution such as bigQuery will possibly help in building a data product
+
+1. BigQuery stores our data in a separate storage known as "Colossus"
+	- Colossus is a cheap storage base
+	- Stores data in a columnar format
+	- This has big advantage
+		- Because bigQuery is now separating the storage from compute, and as a result has significantly less cost
+		- If our data size increases tomorrow we only have to pay for the storage in Colossus
+
+Most of the cost is incurred while reading the data or running the queries, which is compute based
+
+2. But because the storage and the compute are on different hardware, how do they communicate with each other?
+	- If the network, for example, is very bad it will result in high query time
+		- This can be a very big disadvantage
+	- For this the "Jupiter" network is used
+	- The Jupiter network is inside bigQuery data centers
+	- This network provides approximately 1 T.B. / Sec network speed. 
+
+3. The third part of the bigQuery architecture is the "Dremel"
+	- This is known as the query execution engine
+	- It generally divides our query into a tree structure
+		- Root Nodes
+		- Intermediate nodes/Mixers
+		- Leaf nodes (Local storage)
+	- And separates our query in such a way that each node can execute an individual subset of the query
+
+	- How does Dremel actually work?
+		- First the root server recieves our query. It then understands this query and divides into smaller sub modules
+			- Here the query is modified and may change
+		- It further divides the query further to R1 to R1n
+		- The mixers now get the modified queries which is then further divided into other modified queries
+		- These modified queries are then given to the Leaf Nodes
+		- The Leaf Nodes communicate with the Colossus database
+			- They fetch the data from Colossus
+			- Executes the appropriate actions on that data
+			- And returns the data/result to Mixers, which then return the respective data/result to Root server 
+			- And finally the data is aggregated and returned as a result
+		- The distribution of the workers is the reason why bigQuery is so fast
+
+		- If all this was not done, and it was all done on a particular node, it will increase the query time with respect to the data size
+
+
+Column-oriented vs Record-oriented storage
+
+Record-orientated (row)
+	- CSVs
+	- easy to process and understand
+
+Column-oriented
+	- The columns in a row are now re-organized
+	- There will be multiple columns associated with rows
+	- Helps us provide better aggregations on columns 
+	- 
 
 - Machine Learning in BigQuery
