@@ -5,6 +5,17 @@ Introduction
 	-Managing configuration files in source control to maintain an ideal provisioning state for testing and production environments
 	-Provides a consistent CLI workflow to manage hundreds of cloud services.
 	-Manage infra with config files
+
+The idea of Terraform is to have repeatable infrastructure. 
+If you build solely through the web interface, you will have a tough time reproducing the infrastructure with the same configuration as the architecture evolves over time. 
+As a result, your infrastructure is now version controlled.
+
+Best example I can give you for why the reproducibility is useful is the necessity to replicate a particular system's infrastructure in both dev and prod environments. 
+You do it once for dev, then you just need to do a few commands to replicate the entire thing in prod.
+
+Second example, perhaps your company has initiative to experiment on the existing infrastructure that has been 'terraformed'. 
+Well now, you can reproduce the existing infra and experiment on this instead.
+
 What is IaC?
 	-Infrastructure-as-Code
 	-build, change, and manage your infrastructure in a safe, consistent, and repeatable way by defining resource configurations that you can version, reuse, and share.
