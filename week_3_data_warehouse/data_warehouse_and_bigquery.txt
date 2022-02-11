@@ -184,7 +184,7 @@ Most of the cost is incurred while reading the data or running the queries, whic
 	- And separates our query in such a way that each node can execute an individual subset of the query
 
 	- How does Dremel actually work?
-		- First the root server recieves our query. It then understands this query and divides into smaller sub modules
+		- First the root server receives our query. It then understands this query and divides into smaller sub modules
 			- Here the query is modified and may change
 		- It further divides the query further to R1 to R1n
 		- The mixers now get the modified queries which is then further divided into other modified queries
