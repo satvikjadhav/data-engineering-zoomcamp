@@ -212,3 +212,25 @@ Column-oriented
 	- 
 
 - Machine Learning in BigQuery
+
+Target audience Data Analysts, Managers
+No need for Python or Java knowledge
+No need to export data into a different system
+	- We can build the data model in the data warehouse itself (BigQuery)
+
+ML in BigQuery Pricing
+
+- Free Tier
+	- 10 GB per month of data storage
+	- 1 TB per month of queries processed
+	- ML Create model step: first 10 GB per month is free
+
+Steps involved in machine learning
+
+- Data Collection
+- Data Processing / Feature Engineering
+- Data splitting: Training and Test data sets
+- ML Model Training
+- ML Model Validation
+- Deployment
+
