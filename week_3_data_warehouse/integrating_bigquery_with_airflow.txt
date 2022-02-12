@@ -1,0 +1,5 @@
+Workshop: Integrating BigQuery with Airflow
+
+Problem Statement:
+	- Automating the steps we learned in week 3 with Airflow pipelines
+

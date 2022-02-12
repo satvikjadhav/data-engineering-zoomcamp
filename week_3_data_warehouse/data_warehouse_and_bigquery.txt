@@ -234,3 +234,4 @@ Steps involved in machine learning
 - ML Model Validation
 - Deployment
 
+Explain and Predict function in BigQuery ML is helpful when we want to know the top n features used in our dateset and in prediction. 
