@@ -43,10 +43,10 @@ WHERE table_name = 'yellow_tripdata_partitoned'
 ORDER BY total_rows DESC;
 
 -- Creating a partition and cluster table
-CREATE OR REPLACE TABLE taxi-rides-ny.nytaxi.yellow_tripdata_partitoned_clustered
+CREATE OR REPLACE TABLE data-engineering-339113.nytaxi.yellow_tripdata_partitoned_clustered
 PARTITION BY DATE(tpep_pickup_datetime)
 CLUSTER BY VendorID AS
-SELECT * FROM taxi-rides-ny.nytaxi.external_yellow_tripdata;
+SELECT * FROM data-engineering-339113.nytaxi.external_yellow_tripdata;
 
 -- Query scans 1.1 GB
 SELECT count(*) as trips
