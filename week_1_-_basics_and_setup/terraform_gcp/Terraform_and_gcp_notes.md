@@ -1,4 +1,6 @@
-Introduction
+## Terraform and GCP Notes
+
+### Introduction
 	-What is Terraform?
 	-open-source tool by HashiCorp, used for provisioning infrastructure resources
 	-supports DevOps best practices for change management
@@ -16,11 +18,11 @@ You do it once for dev, then you just need to do a few commands to replicate the
 Second example, perhaps your company has initiative to experiment on the existing infrastructure that has been 'terraformed'. 
 Well now, you can reproduce the existing infra and experiment on this instead.
 
-What is IaC?
+### What is IaC?
 	-Infrastructure-as-Code
 	-build, change, and manage your infrastructure in a safe, consistent, and repeatable way by defining resource configurations that you can version, reuse, and share.
 	-Like a git version control system but for infrastructure
-Some advantages
+### Some advantages
 	-Infrastructure lifecycle management
 	-Build, change, and destroy infrastructure with Terraform.
 	-Version control commits
@@ -30,19 +32,18 @@ Some advantages
 Most important part about terraform is the terraform state.
 Which allows us to track resource changes throughout the deployment
 
-To use gcloud do the following steps:
-
-1. Download gcloud SDK
-2. install it via the install.sh or install.bat files
-3. If in windows add a path to your python folder
-4. Create a variable to store your service account key that you generated
-	- export GOOGLE_APPLICATION_CREDENTIALS=~/.gc/ny-rides.json
-5. Now authenticate:
-	gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
-6. or we can use this as well:
+### To use gcloud do the following steps:
+  1. Download gcloud SDK
+  2. install it via the install.sh or install.bat files
+  3. If in windows add a path to your python folder
+  4. Create a variable to store your service account key that you generated
+    - export GOOGLE_APPLICATION_CREDENTIALS=~/.gc/ny-rides.json
+  5. Now authenticate:
+    - gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+  6. or we can use this as well:
 	gcloud auth application-default login
 
-Now we create two infra modules in GCP (Google Cloud Platform)with Terraform
+### Now we create two infra modules in GCP (Google Cloud Platform)with Terraform
 	- Google Cloud Storage: Data Lake
 	- BigQueyr: Data Warehouse
 
@@ -50,8 +51,8 @@ In production we would create custom roles in GCP
 
 Creating GCP Infra with Terraform
 
-Declarations
-- terraform: configure basic Terraform settings to provision your infrastructure
+### Declarations
+  - terraform: configure basic Terraform settings to provision your infrastructure
 	- required_version: minimum Terraform version to apply to your configuration
 	- backend: stores Terraform's "state" snapshots, to map real-world resources to your configuration.
 		- local: stores state file locally as terraform.tfstate
@@ -106,8 +107,8 @@ terraform apply:
 
 Sample terraform apply command:
 
-Terraform will perform the following actions:
-
+### Terraform will perform the following actions:
+```
   # google_bigquery_dataset.dataset will be created
   + resource "google_bigquery_dataset" "dataset" {
       + creation_time              = (known after apply)
@@ -164,21 +165,21 @@ Terraform will perform the following actions:
         }
     }
 
-   	Do you want to perform these actions?
-  	Terraform will perform the actions described above.
-  	Only 'yes' will be accepted to approve.
+     Do you want to perform these actions?
+    Terraform will perform the actions described above.
+    Only 'yes' will be accepted to approve.
 
-  	Enter a value: yes
+    Enter a value: yes
 
-	google_bigquery_dataset.dataset: Creating...
-	google_storage_bucket.data-lake-bucket: Creating...
-	google_storage_bucket.data-lake-bucket: Creation complete after 2s [id=dtc_data_lake_data-engineering-339113]
-	google_bigquery_dataset.dataset: Creation complete after 4s [id=projects/data-engineering-339113/datasets/trips_data_all]
+  google_bigquery_dataset.dataset: Creating...
+  google_storage_bucket.data-lake-bucket: Creating...
+  google_storage_bucket.data-lake-bucket: Creation complete after 2s [id=dtc_data_lake_data-engineering-339113]
+  google_bigquery_dataset.dataset: Creation complete after 4s [id=projects/data-engineering-339113/datasets/trips_data_all]
+```
+#### The beauty of this is that we were able to create 3 different resources/services within one second. How crazy is that?!?
 
-- The beauty of this is that we were able to create 3 different resources/services within one second. How crazy is that?!?
 
-
-terraform destroy:
+### terraform destroy:
 	- In any development enviornment, we do not want to keep our resources set up on our cloud and leave them idle and running
 	- Used to destory or close these resources
 
@@ -186,8 +187,8 @@ sample terraform destroy command being used:
 
  - destroy
 
-Terraform will perform the following actions:
-
+### Terraform will perform the following actions:
+```
   # google_bigquery_dataset.dataset will be destroyed
   - resource "google_bigquery_dataset" "dataset" {
       - creation_time                   = 1643047399213 -> null
@@ -268,6 +269,6 @@ Terraform will perform the following actions:
 	google_bigquery_dataset.dataset: Destroying... [id=projects/data-engineering-339113/datasets/trips_data_all]
 	google_storage_bucket.data-lake-bucket: Destruction complete after 1s
 	google_bigquery_dataset.dataset: Destruction complete after 1s
+```
 
-
-.terraform folder is essentially a package manager
+#### .terraform folder is essentially a package manager
