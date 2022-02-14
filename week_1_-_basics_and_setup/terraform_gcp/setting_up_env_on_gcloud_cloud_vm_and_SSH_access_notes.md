@@ -1,9 +1,9 @@
-How to setup on an enviornment in Google Cloud Platform. 
+## Setting up Google Cloud Virtual Machine (VM)
 	- Renting an instance or a virtual machine and many other resources. 
 
 Can be found under Compute Engine -> VM Instance
 
-Before we make an instance, we need to make an SSH Key. 
+### Before we make an instance, we need to make an SSH Key. 
 	- This Key will be used to log in to the instance that we will be using/making.
 	- We can use GIT Bash to do this as SSH is already built into GIT Bash. 
 	- https://cloud.google.com/compute/docs/connect/create-ssh-keys
@@ -24,7 +24,7 @@ This will be done via the gcloud sdk that we had installed earlier
 
 Once this VM is created, we are no interested in the external ip that is associated with the respective VM. 
 
-Now, we do the following steps:
+### Now, we do the following steps:
 	1. We go to the git bash console, and enter: ssh -i ~/.ssh/gpc satvikjadhav@35.244.13.10
 		- i: identity
 		- use the the private key file
@@ -33,7 +33,7 @@ Now, we do the following steps:
 
 	2. Using the "htop" command we can see the machine config
 
-Once we have access to our VM, we now need to configure it.
+### Once we have access to our VM, we now need to configure it.
 
 	1. We will first get anaconda
 		- we will download anaconda into our vm
