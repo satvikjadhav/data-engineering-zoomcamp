@@ -84,26 +84,26 @@ We make use of two files: main.tf and variables.tf
 	- Variables without default keywords are mandatory at runtime, and variables with default keywords are optional
 
 The following variables are being used:
-	1. variable "project"
-	2. variable "region"
-	3. variable "storage_class"
-	4. variable "BQ_DATASET"
+1. variable "project"
+2. variable "region"
+3. variable "storage_class"
+4. variable "BQ_DATASET"
 
 It is a good practice to keep all the resources that we use in one region.
 	- If our resources are spread accross different regions there could be issues with communications between our resources
 
-terraform init:
-	- Initializes and installs the required plugins for example google providers, and existing configs from the web for the respective cloud provider
+**terraform init**:
+- Initializes and installs the required plugins for example google providers, and existing configs from the web for the respective cloud provider
 
-terraform plan:
-	- A command to show the execution plan. 
-	- Describes the actions the terraform will take in order to create the infracture to match with the configuration
+**terraform plan**:
+- A command to show the execution plan. 
+- Describes the actions the terraform will take in order to create the infracture to match with the configuration
 
-terraform apply:
-	- Detects whatever changes that may have been made by using the terraform plan command
-		- Any resources to be deleted
-		- Any new resources to be created
-		- Any existing resources or modules that need to be updated
+**terraform apply**:
+- Detects whatever changes that may have been made by using the terraform plan command
+	- Any resources to be deleted
+	- Any new resources to be created
+	- Any existing resources or modules that need to be updated
 
 Sample terraform apply command:
 
