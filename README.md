@@ -23,15 +23,20 @@
 	- Port forwarding in VScode
 
 ### Week 2: Data Ingestion
-
+- [Data Lake (GCS)](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_2_data_ingestion/data_lake_notes.md)
+- [Workflow Orchestration](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_2_data_ingestion/workflow_orchestration_notes.md)
+- [Setting up Airflow Locally via Docker](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_2_data_ingestion/airflow/airflow_notes.md)
+- [Ingesting data to GCP with Airflow](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_2_data_ingestion/airflow/ingesting_data_to_gcp_with_airflow_notes.md)
+- [Ingesting data to Local PostgreSQL with Airflow](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_2_data_ingestion/airflow/Ingesting_Data_to_Local_Postgres_with_Airflow_notes.md)
 
 ### Week 3: Data Warehouse
 
 
 ### Week 4: Analytics Engineering
-
+Coming Soon
 
 ### Week 5: Batch Processing
-
+Coming soon
 
 ### Week 6: Stream Processing
+Coming soon

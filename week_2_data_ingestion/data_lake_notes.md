@@ -1,4 +1,4 @@
-What is a Data Lake
+### What is a Data Lake
 - Data lake is a central repository that holds big data from many different data sources
 - Can be structured, semi-structured or unstructured data
 - To ingest data as quickly as possible and make it available asap
@@ -9,22 +9,22 @@ What is a Data Lake
 - R&D on data products
 - Cannot always define the structure of the data
 
-Data Lake vs Data Warehouse
-- Data Lake
+### Data Lake vs Data Warehouse
+- **Data Lake**
 	- Data is unstructured
 	- Data Scientists or Data Analysts
 	- Stores data on the scale of petabytes
 	- Stream Processing, Machine learning and real time analysis
 	- Data is undefined, no relation between data
 
-- Data Warehouse
+- **Data Warehouse**
 	- Data is structured
 	- Business Analysts
 	- Used for batch processing, Business Intelligence, and Reporting
 	- Data size is generally small
 	- Data Warehouses contain historic and relational data
 
-Gotcha of Data Lake
+### Gotchas of Data Lake
 - Starts with a good intention, but soon turns into a Data Swamp
 	- Very hard to be useful
 - No versioning
@@ -34,22 +34,22 @@ Gotcha of Data Lake
 	- Whats the usefulness of the data
 - Joins not possible between different data sets
 
-ELT vs. ETL
-- ETL
+### ELT vs. ETL
+- **ETL**
 	- Extract, Transform, and Load
 	- Used for small amount of data
 	- Data warehouse solution
 	- Schema on write
 	- We define the schema, define the relationships, and then we load the data
 
-- ELT
+- **ELT**
 	- Extract, Load, and Transform
 	- Used for large amount of data
 	- Provides data lake support (Schema on read)
 	- Data lake solution
 	- Write the data first, and then determine the schema when loading the data
 
-Alternatives to components (S3/HDFS, Redshift, Snowflake etc.)
+### Alternatives to components (S3/HDFS, Redshift, Snowflake etc.)
 - GCP -> Cloud Storage
 - AWS -> S3
 - Azure -> Azure Blob

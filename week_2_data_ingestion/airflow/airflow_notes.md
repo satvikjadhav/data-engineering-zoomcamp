@@ -1,33 +1,27 @@
-Setting up Airflow Locally
+## Setting up Airflow Locally
 
-Airflow Concepts
+### Airflow has the following components:
+1. Scheduler
+	- Responsible for scheduling jobs. Handles both triggering & scheduled workflows, submits Tasks to the executor to run, monitors all tasks and DAGs, and then triggers the task instances once their dependencies are complete.
+2. Executor
+3. Metadata Database
+	- Backend to the Airflow environment. Used by the scheduler, executor and webserver to store state.
+4. Workers
+	- This component executes the tasks given by the scheduler.
+5. DAG Directory
+6. Webserver
+	- GUI to inspect, trigger and debug the behaviour of DAGs and tasks. Available at http://localhost:8080.
 
-Airflow Architecture
+### Other components (seen in docker-compose services):
+- redis: Message broker that forwards messages from scheduler to worker.
+- flower: The flower app for monitoring the environment. It is available at http://localhost:5555.
+- airflow-init: initialization service (customized as per this design)
 
-Airflow has the following components:
-	1. Scheduler
-		- Responsible for scheduling jobs. Handles both triggering & scheduled workflows, submits Tasks to the executor to run, monitors all tasks and DAGs, and then triggers the task instances once their dependencies are complete.
-	2. Executor
-	3. Metadata Database
-		- Backend to the Airflow environment. Used by the scheduler, executor and webserver to store state.
-	4. Workers
-		- This component executes the tasks given by the scheduler.
-	5. DAG Directory
-	6. Webserver
-		- GUI to inspect, trigger and debug the behaviour of DAGs and tasks. Available at http://localhost:8080.
-
-	Other components (seen in docker-compose services):
-
-		- redis: Message broker that forwards messages from scheduler to worker.
-		- flower: The flower app for monitoring the environment. It is available at http://localhost:5555.
-		- airflow-init: initialization service (customized as per this design)
-
-Airflow Setup via Docker
+### Airflow Setup via Docker
 
 1. Create a new sub-directory called airflow in your project dir (such as the one we're currently in)
 
 2. Import the official image & setup from the latest Airflow version:
-
 	- curl -LfO 'https://airflow.apache.org/docs/apache-airflow/stable/docker-compose.yaml'
 3. It could be overwhelming to see a lot of services in here. But this is only a quick-start template, and as you proceed you'll figure out which unused services can be removed. Eg. Here's a no-frills version of that template.
 
