@@ -3,15 +3,15 @@
 
 ### Week 1: Basics and Setup
 - Docker
-	- Dockerfile
-	- Using docker-compose to start multiple containers
+	- [Dockerfile](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_1_-_basics_and_setup/docker_sql/dockerfile)
+	- Using [docker-compose](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_1_-_basics_and_setup/docker_sql/docker-compose.yaml) to start multiple containers
 	- Setting up PostgreSQL via Docker
 	- Dockerizing simple [python ingestion script](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_1_-_basics_and_setup/docker_sql/upload_data.py)
-- Terraform
+- [Terraform](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_1_-_basics_and_setup/terraform_gcp/Terraform_and_gcp_notes.md)
 	- Setting up Terraform on local machine
 	- Using Terraform to set up our Google Cloud services
 	- Setting up Terraform files (main and variable)
-- [Setting up Google Cloud Virtual Machine (VM)](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_1_-_basics_and_setup/terraform_gcp/setting_up_env_on_gcloud_cloud_vm_and_SSH_access_notes.txt)
+- [Setting up Google Cloud Virtual Machine (VM)](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_1_-_basics_and_setup/terraform_gcp/setting_up_env_on_gcloud_cloud_vm_and_SSH_access_notes.md)
 	- Setting up environment variables
 	- Setting up SSH access and Config file
 	- Setting up Docker
