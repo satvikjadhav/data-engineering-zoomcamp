@@ -30,7 +30,15 @@
 - [Ingesting data to Local PostgreSQL with Airflow](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_2_data_ingestion/airflow/Ingesting_Data_to_Local_Postgres_with_Airflow_notes.md)
 
 ### Week 3: Data Warehouse
-
+- [Data Warehouse](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/data_warehouse_and_bigquery.md)
+	- Best Practices
+	- Cost
+	- Internals of BigQuery
+	- ML in BigQuery
+	- [BigQuery SQL queries](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/queries.sql)
+- [Partitioning and Clustering](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/bigquery_partioning_and_clustering_notes.md)
+- [Workshop: Integrating BigQuery with Airflow](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/integrating_bigquery_with_airflow.md)
+	- [GCS to BigQuery DAG](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/airflow/dags/gcs_to_bq_dag.py)
 
 ### Week 4: Analytics Engineering
 Coming Soon
