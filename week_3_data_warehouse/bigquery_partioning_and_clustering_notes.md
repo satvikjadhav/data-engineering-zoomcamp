@@ -1,25 +1,25 @@
-Partitioning and Clustering
+## Partitioning and Clustering
 
-BigQeury Partitioning
+### BigQeury Partitioning
 
 We can partition on the following column when creating a partition table
-	- Time-unit column
-		- Daily
-		- Hourly
-			- If we have tons of data coming in
-			- And we want to process our data hourly
-		- Monthly
-		- Yearly
-	- Ingestion time
-		- Daily
-		- Hourly
-		- Monthly
-		- Yearly
-	- Integer range partitioning
+- Time-unit column
+	- Daily
+	- Hourly
+		- If we have tons of data coming in
+		- And we want to process our data hourly
+	- Monthly
+	- Yearly
+- Ingestion time
+	- Daily
+	- Hourly
+	- Monthly
+	- Yearly
+- Integer range partitioning
 
 Number of partitions limit is 4000 in bigQuery
 
-BigQueyr Clustering
+### BigQueyr Clustering
 
 1. The columns we specify are used to colocate the related data
 	- The order of the column is very important here because this is the order that specifies the sort order of the data
@@ -49,7 +49,7 @@ BigQueyr Clustering
 		- TIMESTAMP
 		- DATETIME
 
-Partitioning vs Clustering
+### Partitioning vs Clustering
 
 1. Clustering
 	- Cost benefit unknown
@@ -62,27 +62,27 @@ Partitioning vs Clustering
 	- You need partition-level management
 	- Filter or aggregate on single column
 
-When will we chose clustering over partitioning
+#### When will we chose clustering over partitioning
 
-1. We will using clustering over partitioning when the partitioning results in a small amount of data per partition (less than 1 G.B.)
+1. We will be using clustering over partitioning when the partitioning results in a small amount of data per partition (less than 1 G.B.)
 
 2. Partition results in a large number of partitions (> 4000 for example)
 
 3. Partitioning results in your mutation operations modifying the majority of partitions in the table frequently (for example, every few minutes)
 	- Writing data to our bigQuery table that modifies the partitions then it might not be a good idea to use partitioning
 
-Automatic Re-clustering by BigQuery
-	- This does not cost the end user anything as its done in the background
+#### Automatic Re-clustering by BigQuery
+	This does not cost the end user anything as its done in the background
 
 As data is added to a clustered table
 
-	- this newly inserted data can be written to blocks that contain key ranges
-	- These key ranges overlap with the key ranges in previously written blocks
-	- These overlapping keys weaken the sort property of the table
-	- As a result our query time can increase
+- this newly inserted data can be written to blocks that contain key ranges
+- These key ranges overlap with the key ranges in previously written blocks
+- These overlapping keys weaken the sort property of the table
+- As a result our query time can increase
 
 To maintain the performance characteristics of a clustered table
 
-	- BigQuery performs automatic re-clustering in the background
-	- This is done to restore the sort property of the table
-	- For partitioned tables, clustering is maintained for data within the scope of each partition
+- BigQuery performs automatic re-clustering in the background
+- This is done to restore the sort property of the table
+- For partitioned tables, clustering is maintained for data within the scope of each partition

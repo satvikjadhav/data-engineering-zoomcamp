@@ -1,63 +1,63 @@
-Data Warehouse and BigQuery Notes: https://www.youtube.com/watch?v=jrHljAoD6nM&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=26
+## [Data Warehouse and BigQuery Notes](https://www.youtube.com/watch?v=jrHljAoD6nM&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=26)
 
-Data Warehouse - We will be using BigQuery mainly
+### Data Warehouse 
+	We will be using BigQuery mainly
 
-Online Analytical Processing (OLAP) vs Online Transaction Processing (OLTP)
+### Online Analytical Processing (OLAP) vs Online Transaction Processing (OLTP)
+	OLAP databases are mainly used by analysts and for analytical purposes
 
-- OLAP databases are mainly used by analysts and for analytical purposes
-
-OLTP
-- Purpose
+#### OLTP
+- **Purpose**
 	- Control and run essential business operations in real time
 
-- Data updates
+- **Data updates**
 	- Short, fast updates initiated by user
 
-- Database design
+- **Database design**
 	- Normalized databases for efficiency
 
-- Space requirements
+- **Space requirements**
 	- Generally small if historical data is archived
 
-- Backup and recovery
+- **Backup and recovery**
 	- Regular backups required to ensure business continuity and meet legal and governance requirements
 
-- Productivity
+- **Productivity**
 	- Increases productivity of end users
 
-- Data View
+- **Data View**
 	- Lists day-to-day business transactions
 
-- User Examples
+- **User Examples**
 	- Customer-facing personnel, clerks, online shoppers
 
-OLAP
-- Purpose
+#### OLAP
+- **Purpose**
 	- Plan, solve problems, support decisions, discover hidden insights
 
-- Data updates
+- **Data updates**
 	- Data periodically refreshed with scheduled, long-running batch jobs
 
-- Database design
+- **Database design**
 	- Denormalized databases for analysis
 
-- Space requirements
+- **Space requirements**
 	- Generally large due to aggregating large datasets
 
-- Backup and recovery
+- **Backup and recovery**
 	- Lost data can be reloaded from OLTP database as needed in lieu of regular backups
 
-- Productivity
+- **Productivity**
 	- Increases productivity of business managers, data analysts, and executives
 
-- Data View
+- **Data View**
 	- Multi-dimensional view of enterprise data
 
-- User Examples
+- **User Examples**
 	- Knowledge workers such as data analysts, business analysts, and executives
 
 
-What is a Data Warehouse?
+### What is a Data Warehouse?
 
 - It is an OLAP solution
 - Used for reporting and data analysis
@@ -65,9 +65,8 @@ What is a Data Warehouse?
 - Data Warehouses can have many sources such as different operational systems, or other databases, or flat file systems
 - Used by data analysts or data scientists
 
-BigQuery
-
-- this is a data warehouse solution by Google
+### BigQuery
+	This is a data warehouse solution by Google
 
 - It is a serverless data warehouse
 	- There are no servers to manage or database software to install
@@ -90,7 +89,7 @@ BigQuery
 - BigQuery generally caches the results
 
 
-- Cost
+- **Cost**
 	- On Demand Pricing
 		- Based on the amount of data scanned or processed
 		- 1 TB of data processed is $5
@@ -105,23 +104,23 @@ BigQuery
 - When we use external data to create tables, bigQuery is not able to determine its row size or the table size
 	- This is because the data itself is not inside bigQuery
 
-- Partitions and Clustering
+### Partitions and Clustering
 
-- Partitioning
+- **Partitioning**
 	- Generally when we create a dataset, there are columns that are used the most
 	- For example if we want using the date column alot and we partition the table on date column, it can improve the query performance by a lot
 	- This is really good for bigQuery as now bigQuery will only process the data in that specific partition as opposed to processing all of the data
 
-- Clustering
+- **Clustering**
 	- We can also cluster the tables according to a column (For example the "Tags" column in stackoverflow questions table)
 	- example in the queries.sql file
 	- The choice of using which column as for clustering is dependent on how we want to query our data
 
-- Best Practices
+### Best Practices
 
 We are generally concerned with cost reduction or improving query performance
 
-1. Cost Reduction
+1. **Cost Reduction**
 	- Avoid the use of SELECT * queries
 		- BigQuery stores data in a columnar storage format, so its better to query specific columns
 	- Price your queries before running them
@@ -129,7 +128,7 @@ We are generally concerned with cost reduction or improving query performance
 	- Use streaming inserts with caution
 	- Materialize query results into different stages
 
-2. Query Performance
+2. **Query Performance**
 	- Filter on partitioned columns
 	- Denormalized data
 	- Use nested or repeated columns
@@ -152,21 +151,20 @@ We are generally concerned with cost reduction or improving query performance
 			- If we place the large table first, it will get distributed evenly
 			- And the second table will be broadcasted to all the nodes
 
+### Internals
 
-- Internals
+- High level architecture picture of bigQuery is in the [pdf file](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/data_warehouse_ppt.pdf)
 
-High level architecture picture of bigQuery is in the pdf file
+> Knowing the internals of a data warehouse solution such as bigQuery will possibly help in building a data product
 
-Knowing the internals of a data warehouse solution such as bigQuery will possibly help in building a data product
-
-1. BigQuery stores our data in a separate storage known as "Colossus"
+1. BigQuery stores our data in a separate storage known as **"Colossus"**
 	- Colossus is a cheap storage base
 	- Stores data in a columnar format
 	- This has big advantage
 		- Because bigQuery is now separating the storage from compute, and as a result has significantly less cost
 		- If our data size increases tomorrow we only have to pay for the storage in Colossus
 
-Most of the cost is incurred while reading the data or running the queries, which is compute based
+**Most of the cost is incurred while reading the data or running the queries, which is compute based**
 
 2. But because the storage and the compute are on different hardware, how do they communicate with each other?
 	- If the network, for example, is very bad it will result in high query time
@@ -175,7 +173,7 @@ Most of the cost is incurred while reading the data or running the queries, whic
 	- The Jupiter network is inside bigQuery data centers
 	- This network provides approximately 1 T.B. / Sec network speed. 
 
-3. The third part of the bigQuery architecture is the "Dremel"
+3. The third part of the bigQuery architecture is the **"Dremel"**
 	- This is known as the query execution engine
 	- It generally divides our query into a tree structure
 		- Root Nodes
@@ -183,7 +181,7 @@ Most of the cost is incurred while reading the data or running the queries, whic
 		- Leaf nodes (Local storage)
 	- And separates our query in such a way that each node can execute an individual subset of the query
 
-	- How does Dremel actually work?
+	- How does **Dremel** actually work?
 		- First the root server receives our query. It then understands this query and divides into smaller sub modules
 			- Here the query is modified and may change
 		- It further divides the query further to R1 to R1n
@@ -199,33 +197,33 @@ Most of the cost is incurred while reading the data or running the queries, whic
 		- If all this was not done, and it was all done on a particular node, it will increase the query time with respect to the data size
 
 
-Column-oriented vs Record-oriented storage
+### Column-oriented vs Record-oriented storage
 
-Record-orientated (row)
-	- CSVs
-	- easy to process and understand
+**Record-orientated (row)**
+- CSVs
+- easy to process and understand
 
-Column-oriented
-	- The columns in a row are now re-organized
-	- There will be multiple columns associated with rows
-	- Helps us provide better aggregations on columns 
-	- 
+**Column-oriented**
+- The columns in a row are now re-organized
+- There will be multiple columns associated with rows
+- Helps us provide better aggregations on columns 
 
-- Machine Learning in BigQuery
+
+### Machine Learning in BigQuery
 
 Target audience Data Analysts, Managers
 No need for Python or Java knowledge
 No need to export data into a different system
-	- We can build the data model in the data warehouse itself (BigQuery)
+- We can build the data model in the data warehouse itself (BigQuery)
 
-ML in BigQuery Pricing
+#### ML in BigQuery Pricing
 
 - Free Tier
 	- 10 GB per month of data storage
 	- 1 TB per month of queries processed
 	- ML Create model step: first 10 GB per month is free
 
-Steps involved in machine learning
+#### Steps involved in machine learning
 
 - Data Collection
 - Data Processing / Feature Engineering
