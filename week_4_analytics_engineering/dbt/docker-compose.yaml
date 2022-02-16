@@ -4,6 +4,7 @@ services:
     build:
       context: .
       target: dbt-bigquery
+    working_dir: /usr/app/dbt/taxi_rides_ny
     image: dbt/bigquery
     volumes:
       - .:/usr/app

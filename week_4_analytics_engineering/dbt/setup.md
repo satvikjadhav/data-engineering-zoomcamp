@@ -73,6 +73,16 @@ This is a quick guide on how to setup dbt with BigQuery on Docker.
     - **Note:** The automatic path conversion in Git Bash will cause the commands to fail with `--workdir` flag. It can be fixed by prefixing the path with `//` as is done above. The solution was found [here](https://github.com/docker/cli/issues/2204#issuecomment-638993192).
     - Also, we change the working directory to the dbt project because the `dbt_project.yml` file should be in the current directory. Else it will throw `1 check failed: Could not load dbt_project.yml`
 
+- Alternatively, if we don't want to specify `--workdir="//usr/app/dbt/taxi_rides_ny"` every time, we can add the following line to our docker-compose.yaml file
+  - ```yaml
+    version: '3'
+    services:
+      dbt-de-zoomcamp:
+        build:
+          context: .
+          target: dbt-bigquery
+        **working_dir: /usr/app/dbt/taxi_rides_ny**
+    ```
 
 ### Commands
 
