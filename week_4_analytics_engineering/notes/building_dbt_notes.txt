@@ -1,0 +1,83 @@
+Building dbt (https://www.youtube.com/watch?v=UVI30Vxzd6c&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=39)
+
+Anatomy of a dbt Model
+	Models are shuffle select essentially, so the transformation or the business logic we are going to translate it to is a select statement
+
+1. A dbt model is a SQL file
+	- Has double curly brackets (also known as jinja templating)
+		- we can use functions or macros in these
+	- this is where we write our select statements
+2. Several materialization strategies (most common ones)
+	- Table
+	- View
+	- Incremental
+		- Useful for data that doesn't change everyday
+	- Ephemeral
+3. dbt then runs this compiled code in the data warehouse
+
+The FROM Clause of a dbt Model
+
+Sources (in a select statement)
+- The data loaded to our data warehouse that we use as sources for our model
+- These sources are are defined in the yml files in the models folder
+```yaml
+sources:
+	- name: staging
+		database: production
+		schema: trip_data_all
+		tables:
+			- name: green_tripdata
+```
+- This would look like: 
+```sql
+select * from {{source('staging', 'green_tripdata')}}
+```
+- this will be translated to:
+```sql
+select * from production.trip_data_all.green_tripdata
+```
+- This will also take care of all the dependencies at the end
+- In one schema and database, we can define as many tables as we want and sources as well
+- Source freshness can be defined and tested via 'freshness'
+
+Seeds
+	Nothing more than a copy command
+- CSV files stored in our repository under the seed folder
+- Benefits of version controlling
+	- These CSV files will be in our repository
+- Recommended for data that does not change frequently
+- Runs with 'dbt seed -s file_name'
+- Used with the 'ref' macro
+
+Ref
+- Macro to reference the underlying tables and views that were building the data warehouse
+- Run the same code in any environment, it will resolve the correct schema for you
+- Dependencies are build automatically
+dbt model:
+```
+with green_data as (
+	select *, 
+		'Green' as service_type
+	from {{ ref('stg_green_tripdata') }}
+	)
+```
+compiled code:
+```
+with green_data as (
+	select *, 
+		'Green' as service_type
+	from "database_name"."schema_name"."stg_green_tripdata"
+	)
+```
+
+Defining a source and developing the first model (stg_green_tripdata)
+
+Let's first create two new folders under the `models` folder in our dbt project (taxi_rides_ny)
+1. Staging
+- in this we are going to be creating our raw models
+- taking the raw data in views/tables, applying some typecasting, renaming, adding a derived table, 
+2. Core
+- in the we are going to create models that will be shared with stakeholders 
+- exposed to the bi tool 
+- models that we want in production
+
