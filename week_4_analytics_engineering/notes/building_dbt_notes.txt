@@ -75,9 +75,33 @@ Defining a source and developing the first model (stg_green_tripdata)
 Let's first create two new folders under the `models` folder in our dbt project (taxi_rides_ny)
 1. Staging
 - in this we are going to be creating our raw models
-- taking the raw data in views/tables, applying some typecasting, renaming, adding a derived table, 
+- taking the raw data in views/tables, applying some typecasting, renaming, adding a derived table
+- create our model file: 'stg_green_tripdata.sql'
+	- When creating the query, we should use the 'source' macro as it will build the necessary dependencies and
+	- And also resolve the appropriate schema for us
+- create 'schema.yml' in this folder  
+	- **remember to but a line before 'version: 2' so the 'schema.yml' file will work**
+	- In this we define the source, database(project name), and schema (dataset)
+	- And we can have as many tables under this source as we want
+	- in the 'tables' we define the name of tables that we want to use as 'sources' in our 'model'
+- In sources we can also define 'freshness'
+	- Use field that is used to load that data
+- Source marco: source('source_name'.'table_name')
+- model query written: 
+```sql
+select * from {{ source('staging','green_taxi') }}
+limit 100
+```
+- query compiled by dbt:
+```sql
+select * from `data-engineering-339113`.`trips_data_all`.`green_taxi`
+limit 100
+```
+
+
 2. Core
 - in the we are going to create models that will be shared with stakeholders 
 - exposed to the bi tool 
 - models that we want in production
 
+Definition and Usage of Macros
