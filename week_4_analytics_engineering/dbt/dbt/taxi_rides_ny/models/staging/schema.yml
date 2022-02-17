@@ -1,0 +1,16 @@
+
+version: 2
+
+sources:
+    - name: staging
+      #For bigquery:
+      database: data-engineering-339113
+      # Dataset name
+      schema: trips_data_all
+
+      # loaded_at_field: record_loaded_at
+      tables:
+        - name: green_taxi
+        - name: yellow_taxi
+         # freshness:
+           # error_after: {count: 6, period: hour}
