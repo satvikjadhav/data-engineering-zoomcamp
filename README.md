@@ -41,7 +41,12 @@
 	- [GCS to BigQuery DAG](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_3_data_warehouse/airflow/dags/gcs_to_bq_dag.py)
 
 ### Week 4: Analytics Engineering
-Coming Soon
+- [Analytics Engineering Basics](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_4_analytics_engineering/notes/analytics_engineering_basics.md)
+- [What is dbt?](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_4_analytics_engineering/notes/what_is_dbt.md)
+- [Building dbt](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_4_analytics_engineering/notes/building_dbt_notes.md)
+- [Creating dbt Project Locally](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_4_analytics_engineering/notes/creating_dbt_project_locally_notes.md)
+- [Testing and Documenting dbt Project](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_4_analytics_engineering/notes/testing_and_documenting_project_notes.md)
+- [Deploying using dbt](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_4_analytics_engineering/notes/deployment_using_dbt_cloud.md)
 
 ### Week 5: Batch Processing
 Coming soon
