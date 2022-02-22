@@ -1,9 +1,9 @@
-Testing and Documenting dbt Project
+## Testing and Documenting dbt Project
 	Testing is not necessarily needed but is very much suggested to have in a mature project
 
-Tests
+### Tests
 - Assumptions that we make about our data
-- Tests in dbt are essentially a 'select' sql query
+- Tests in dbt are essentially a `select` sql query
 - These assumptions get compiled to sql that returns the amount of failing records
 - Tests are defined on a column in the .yml file
 - dbt provides basic tests to check if the column values are:
@@ -30,9 +30,10 @@ select *
 from data-engineering-339113.dbt_satvik.stg_green_tripdata
 where tripid is null
 ```
-- 'severity' lets the dbt know should it stop everything and warn us or continue running everything else
+- `severity` lets the dbt know should it stop everything and warn us or continue running everything else
 
-Documentation
+### Documentation
+
 - dbt provides a way to generate documentation for dbt project
 - It is rendered as a website that others can view/access
 - The documentation for dbt project includes
