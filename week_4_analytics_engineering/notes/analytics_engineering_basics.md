@@ -73,7 +73,8 @@ However recently Data Analysts and Data Scientists are writing more and more cod
 
 
 #### Elements of Dimensional Modeling
-	- Star Schema
+
+- **Star Schema**
 
 1. **Facts Tables**
 	- Measurements, metrics or just facts of our business
