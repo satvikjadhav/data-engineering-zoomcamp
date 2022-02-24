@@ -1,0 +1,31 @@
+Introduction to Spark
+
+What is Apache Spark 
+- Apache Spark is an open-source unified analytics engine for large-scale data processing. Spark provides an interface for programming clusters with implicit data parallelism and fault tolerance
+- Apache Spark is a multi-language engine for executing data engineering, data science, and machine learning on single-node machines or clusters
+
+- A data processing **Engine**
+
+- Sample Process:
+	- Take data from our data Lake
+	- Load data to the machines on which spark is being run on
+	- Then output the data to a data lake or a data warehouse
+
+- Distributed
+	- Can have multiple machines working together to process the same data
+	- Makes it faster
+
+- Can be used for Batch jobs and Streaming
+
+When to use Spark?
+
+- Typically used when our data is in a data lake
+	- Parquet files are preferred
+
+Typical Workflow using Spark
+1. Raw data to a data lake
+2. Add transformations or joins on this data using Presto or Athena (SQL based) - most of Pre processing here
+3. Spark doing intensive tasks on this data (which cannot be done via SQL)
+	- Using spark, we can take the trained model in python and use spark to apply the model
+4. Python - Training/ML
+5. Result can go to a Data Lake or a Data Warehouse

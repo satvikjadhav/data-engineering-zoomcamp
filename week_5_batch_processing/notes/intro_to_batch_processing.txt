@@ -1,0 +1,30 @@
+Introduction to Batch Processing
+
+Different ways to process data
+	Batch vs Streaming
+
+- Batch
+	- One single `job` that takes a set amount of data, which is then transformed or some new data is produced
+	- This could be done in intervals of months, weeks days, hours, or every 5 minutes
+- Streaming
+	- Processing of data in real time
+	- `Events`
+	- When booking a taxi, for example, the confirmation and notifications are processed in real time
+
+Technologies
+- Python Scripts
+	- Can be run in: Kubernetes, Sparks
+- SQL
+- Spark
+- Flink
+
+Advantages and Disadvantages of Batch Jobs
+
+Advantages
+- Easy to manage
+- Convenient to retry 
+- Easier to scale
+
+Disadvantages
+- Delay
+- 
