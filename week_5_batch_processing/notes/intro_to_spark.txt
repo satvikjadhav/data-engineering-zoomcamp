@@ -29,3 +29,66 @@ Typical Workflow using Spark
 	- Using spark, we can take the trained model in python and use spark to apply the model
 4. Python - Training/ML
 5. Result can go to a Data Lake or a Data Warehouse
+
+
+## First Look at Spark/Pyspark
+
+SparkSession is the object that we use to interact with Spark
+
+Reading CSV Files
+
+Unlike `Pandas`, `Spark` doesn't try to infer the data type
+
+A simple work around for this is by using Pandas to infer the data types, and then creating our schema using this information
+- In spark, each `Integer` takes 4 bytes and each `Long` takes 8 bytes worth of data
+
+using the `schema` on our spark dataframe, we can get the schema output such as:
+```
+StructType(List(StructField(hvfhs_license_num,StringType,true),StructField(dispatching_base_num,StringType,true),StructField(pickup_datetime,StringType,true),StructField(dropoff_datetime,StringType,true),StructField(PULocationID,LongType,true),StructField(DOLocationID,LongType,true),StructField(SR_Flag,DoubleType,true)))
+
+```
+
+`StructType` is something that comes from `Scala`, but we need to turn this into a python code
+
+We will use this to declare a schema for our dataframe
+
+And we transform it to as follows:
+```python
+schema = types.StructType([
+    types.StructField('hvfhs_license_num', types.StringType(), True),
+    types.StructField('dispatching_base_num', types.StringType(), True),
+    types.StructField('pickup_datetime', types.TimestampType(), True),
+    types.StructField('dropoff_datetime', types.TimestampType(), True),
+    types.StructField('PULocationID', types.IntegerType(), True),
+    types.StructField('DOLocationID', types.IntegerType(), True),
+    types.StructField('SR_Flag', types.StringType(), True)
+])
+```
+
+And now when we read in a csv file, we can use the schema variable as follows:
+```python
+df = spark.read \
+    .option("header", "true") \
+    .schema(schema) \
+    .csv('fhvhv_tripdata_2021-01.csv')
+```
+
+Partitions
+
+Since our csv file a one large file, only one spark executer will take care of it, and this is not efficient
+
+To overcome this, we can `partition` our file into multiple smaller files which can then be used by the idle spark executers, thus making it more efficient
+
+We can think of a partition as roughly a separate file
+
+We can do this by using the following command: 
+```python
+df = df.repartition(24)
+```
+
+Repartitioning is quite an expensive operation 
+
+And then to save this file as a parquet: 
+```python
+df.write.parquet('fhvhv/2021/01/')
+```
