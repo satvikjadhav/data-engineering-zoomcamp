@@ -35,12 +35,26 @@ Typical Workflow using Spark
 
 SparkSession is the object that we use to interact with Spark
 
+```python
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .getOrCreate()
+```
+
 Reading CSV Files
 
 Unlike `Pandas`, `Spark` doesn't try to infer the data type
 
 A simple work around for this is by using Pandas to infer the data types, and then creating our schema using this information
 - In spark, each `Integer` takes 4 bytes and each `Long` takes 8 bytes worth of data
+
+To create a spark dataframe from a csv file:
+```python
+df = spark.read \
+    .option("header", "true") \
+    .csv('fhvhv_tripdata_2021-01.csv')
+```
 
 using the `schema` on our spark dataframe, we can get the schema output such as:
 ```
