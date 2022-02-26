@@ -79,6 +79,8 @@ schema = types.StructType([
 ])
 ```
 
+Note: The other way to infer the schema (apart from pandas) for the csv files, is to set the `inferSchema` option to `true` while reading the files in Spark
+
 And now when we read in a csv file, we can use the schema variable as follows:
 ```python
 df = spark.read \
