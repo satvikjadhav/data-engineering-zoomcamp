@@ -30,6 +30,12 @@ Typical Workflow using Spark
 4. Python - Training/ML
 5. Result can go to a Data Lake or a Data Warehouse
 
+Spark comes in handy when we want to deal with data only in the datalake. 
+- For example, we want to take some data from the datalake, process it, run some transformations on it, and then put it back in datalake
+- In this case, we didn't touch the data warehouse at all
+
+As a result, we are able to utilize data warehouse for doing analytics, and keep it separate from data processing and related activities
+
 
 ## First Look at Spark/Pyspark
 
