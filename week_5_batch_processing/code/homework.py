@@ -15,7 +15,7 @@ from pyspark.sql import functions as F
 # In[2]:
 
 
-spark = SparkSession.builder     .master("local[*]")     .appName('test')     .config("spark.executor.memory", "28g")     .config("spark.driver.memory", "4g")     .getOrCreate()
+spark = SparkSession.builder.master("local[*]").appName('test').config("spark.executor.memory", "28g").config("spark.driver.memory", "4g").getOrCreate()
 
 
 # In[3]:
