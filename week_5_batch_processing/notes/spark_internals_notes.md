@@ -42,7 +42,7 @@ Usually, the way it works is as follows:
 There is a `driver`	that submits the code to the `spark master` in a `spark cluster`
 
 
-## GroupoBy in Spark
+## GroupBy in Spark
 
 The query we will be using as an example will be the following: 
 

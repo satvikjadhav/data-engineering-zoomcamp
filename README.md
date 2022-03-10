@@ -49,7 +49,17 @@
 - [Deploying using dbt](https://github.com/satvikjadhav/data-engineering-zoomcamp/blob/main/week_4_analytics_engineering/notes/deployment_using_dbt_cloud.md)
 
 ### Week 5: Batch Processing
-Coming soon
+- [Batch Processing](week_5_batch_processing/notes/intro_to_batch_processing.md)
+- [What is Spark](week_5_batch_processing/notes/intro_to_spark.md)
+- [Spark Dataframes](week_5_batch_processing/notes/spark_dataframes.md)
+- [Spark Internals](week_5_batch_processing/notes/spark_internals_notes.md)
+	- Anatomy of a Spark Cluster
+	- Group By in Spark
+	- Joins in Spark
+- Spark Setup
+	- [Linux](week_5_batch_processing/notes/installing_spark_on_linux.md)
+	- [PySpark on Linux](week_5_batch_processing/notes/setting_up_pyspark_on_linux.md)
+- [Using GCS with Spark](week_5_batch_processing/notes/using_gcs_with_spark.md)
 
 ### Week 6: Stream Processing
 Coming soon

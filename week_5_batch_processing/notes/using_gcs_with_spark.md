@@ -1,4 +1,4 @@
-Connect Spark to Google Cloud Storage (DataLake)
+# Connect Spark to Google Cloud Storage (DataLake)
 
 
 1. IMPORTANT: Download the Cloud Storage connector for Hadoop here: https://cloud.google.com/dataproc/docs/concepts/connectors/cloud-storage#clusters

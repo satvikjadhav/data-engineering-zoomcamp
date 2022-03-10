@@ -1,8 +1,8 @@
-## Installing Spark on Linux
+# Installing Spark on Linux
 
 Here we'll learn how to install Spark 3.0.3 for Linux. We tested it on Ubuntu 20.04 (also WSL), but it should work for other Linux distros as well
 
-### Installing Java
+## Installing Java
 
 Download OpenJDK 11 or Oracle JDK 11 (It's important that the version is 11 - spark requires 8 or 11)
 
@@ -10,7 +10,7 @@ We'll use [OpenJDK](https://jdk.java.net/archive/)
 
 Download it (e.g. to `~/spark`):
 
-```
+```bash
 wget https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
 ```
 
@@ -37,7 +37,7 @@ java --version
 
 Output:
 
-```
+```bash
 openjdk 11.0.2 2019-01-15
 OpenJDK Runtime Environment 18.9 (build 11.0.2+9)
 OpenJDK 64-Bit Server VM 18.9 (build 11.0.2+9, mixed mode)
@@ -49,7 +49,7 @@ Remove the archive:
 rm openjdk-11.0.2_linux-x64_bin.tar.gz
 ```
 
-### Installing Spark
+## Installing Spark
 
 Download Spark. Use 3.0.3 version:
 
@@ -76,7 +76,7 @@ export SPARK_HOME="${HOME}/spark/spark-3.0.3-bin-hadoop3.2"
 export PATH="${SPARK_HOME}/bin:${PATH}"
 ```
 
-### Testing Spark
+## Testing Spark
 
 Execute `spark-shell` and run the following:
 
@@ -89,6 +89,6 @@ distData.filter(_ < 10).collect()
 And if we don't want to write the variables everytime we log in, we can add the above lines in our `.bashrc` file using `nano`
 	We can now write `source .bashrc' to reload the file
 
-### PySpark
+## PySpark
 
-It's the same for all platforms. Go to [pyspark.md](pyspark.md). 
+It's the same for all platforms. Go to [pyspark.md](week_5_batch_processing/notes/setting_up_pyspark_on_linux.md). 

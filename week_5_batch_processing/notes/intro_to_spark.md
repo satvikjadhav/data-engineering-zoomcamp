@@ -1,6 +1,6 @@
-Introduction to Spark
+# Introduction to Spark
 
-What is Apache Spark 
+## What is Apache Spark 
 - Apache Spark is an open-source unified analytics engine for large-scale data processing. Spark provides an interface for programming clusters with implicit data parallelism and fault tolerance
 - Apache Spark is a multi-language engine for executing data engineering, data science, and machine learning on single-node machines or clusters
 
@@ -17,12 +17,12 @@ What is Apache Spark
 
 - Can be used for Batch jobs and Streaming
 
-When to use Spark?
+## When to use Spark?
 
 - Typically used when our data is in a data lake
 	- Parquet files are preferred
 
-Typical Workflow using Spark
+### Typical Workflow using Spark
 1. Raw data to a data lake
 2. Add transformations or joins on this data using Presto or Athena (SQL based) - most of Pre processing here
 3. Spark doing intensive tasks on this data (which cannot be done via SQL)
@@ -30,7 +30,7 @@ Typical Workflow using Spark
 4. Python - Training/ML
 5. Result can go to a Data Lake or a Data Warehouse
 
-Spark comes in handy when we want to deal with data only in the datalake. 
+**Spark comes in handy when we want to deal with data only in the datalake.** 
 - For example, we want to take some data from the datalake, process it, run some transformations on it, and then put it back in datalake
 - In this case, we didn't touch the data warehouse at all
 
@@ -48,7 +48,7 @@ spark = SparkSession.builder \
     .getOrCreate()
 ```
 
-Reading CSV Files
+## Reading CSV Files
 
 Unlike `Pandas`, `Spark` doesn't try to infer the data type
 
@@ -63,9 +63,8 @@ df = spark.read \
 ```
 
 using the `schema` on our spark dataframe, we can get the schema output such as:
-```
+```scala
 StructType(List(StructField(hvfhs_license_num,StringType,true),StructField(dispatching_base_num,StringType,true),StructField(pickup_datetime,StringType,true),StructField(dropoff_datetime,StringType,true),StructField(PULocationID,LongType,true),StructField(DOLocationID,LongType,true),StructField(SR_Flag,DoubleType,true)))
-
 ```
 
 `StructType` is something that comes from `Scala`, but we need to turn this into a python code
@@ -95,7 +94,7 @@ df = spark.read \
     .csv('fhvhv_tripdata_2021-01.csv')
 ```
 
-Partitions
+## Partitions
 
 Since our csv file a one large file, only one spark executer will take care of it, and this is not efficient
 
