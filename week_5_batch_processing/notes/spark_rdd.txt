@@ -104,5 +104,19 @@ rows = duration_rdd.take()
 df = pd.DataFrame(rows, columns=columns)
 ```
 
-## Spark RDD mapPartrition
+## Spark RDD mapPartition
+
+What `mapPartition` is doing is the following:
+1. Input: RDD Partition - Entire chunk of data
+2. Apply some function to this chunk of data
+3. Output: New modified RDD Partition that we have applied the function on
+
+This is particularly useful when we have, for example, 1 terabyte of data. 
+And since we don't have 1 terabyte of RAM, we would partition this into, say, chunks of 100mb partitions. 
+We can now process those chunks separately. 
+
+This is also convenient when we want to use do Machine Learning related tasks.
+- For example, applying Machine Learning predictions to a data set. 
+- Since we can't load in a 1 terabyte file, we would partition that 1 terabyte file into smaller chunks and apply the Machine Learning model using the `mapPartition` function
+
 
