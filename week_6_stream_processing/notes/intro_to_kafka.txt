@@ -46,7 +46,7 @@ Generally, when we are talking about pushing data to Kafka or talking between pr
 
 **Messages** have 3 main components:
 
-- ***Key***: used to identify the message and for additional Kafka stuff such as partitions, and which direction this message will go into (covered later).
+- ***Key***: used to identify the message and for additional Kafka stuff such as partitions, and which direction or which partition this message will go into (covered later).
 - ***Value***: the actual information that producers push and consumers are interested in.
 - ***Timestamp***: used for logging. Can be put by a producer or a consumer
 
@@ -55,6 +55,7 @@ Generally, when we are talking about pushing data to Kafka or talking between pr
 A ***topic*** is an abstraction of a concept. Concepts can be anything that makes sense in the context of the project, such as "sales data", "new members", "clicks on banner", etc.
 
 For example, we can have `topic` for `click data` in which there will click related data. And producers will push click related data to this topic, and consumers will consume click related data from this topic
+- The idea is that each `concept` has its own `topic`
 
 A **producer** pushes a message to a topic, which is then consumed by a **consumer** subscribed to that topic.
 
@@ -70,4 +71,70 @@ In Kafka, ***logs*** are _data segments_ present on a storage disk. In other wor
 
 ***Logs*** store messages in an ordered fashion. Kafka assigns a sequence ID in order to each new message and then stores it in logs.
 - ***Logs*** help us to keep and store our data in Kafka
+
+### Intermission: visualizing the concepts so far
+
+Here's how a producer and a consumer would talk to the same Kafka broker to send and receive messages.
+
+* Producer sending messages to Kafka.
+    ```mermaid
+    flowchart LR
+        p(producer)
+        k{{kafka broker}}
+        subgraph logs[logs for topic 'abc']
+            m1[message 1]
+            m2[message 2]
+            m3[message 3]
+        end
+        p-->|1. Declare topic 'abc'|k
+        p-->|2. Send messages 1,2,3|k
+        k -->|3. Write messages 1,2,3|logs
+        k-.->|4. ack|p
+    ```
+    1. The producer first declares the topic it wants to "talk about" to Kafka. In this example, the topic will be `abc`. Kafka will then assign a _physical location_ on the hard drive for that specific topic (the topic logs).
+    1. The producer then sends messages to Kafka (in our example, messages 1, 2 and 3).
+    1. Kafka assigns an ID to the messages and writes them to the logs.
+    1. Kafka sends an acknowledgement to the producer, informing it that the messages were successfully sent and written.
+
+* Consumer receiving messages
+    * Broker and logs are the same as those in the first graph; the graph has been split in 2 for clarity.
+    ```mermaid
+    flowchart LR
+        c(consumer)
+        k{{kafka broker}}
+        subgraph logs[logs for topic 'abc']
+            m1[message 1]
+            m2[message 2]
+            m3[message 3]
+        end
+        c-->|1. Subscribe to topic 'abc|k
+        k<-->|2. Check messages|logs
+        k-->|3. Send unread messages|c
+        c-.->|4. ack|k
+    ```
+    1. The consumer declares to Kafka that it wants to read from a particular topic. In our example, the topic is `abc`.
+    1. Kafka checks the logs and figures out which messages for that topic have been read and which ones are unread.
+    1. Kafka sends the unread messages to the consumer.
+    1. The consumer sends an acknowledgement to Kafka, informint it that the messages were successfully received.
+
+### `__consumer_offsets`
+	This is considered as an Internal Topic in Kafka
+
+The workflows work fine for a single consumer but it omits how it keeps track of read messages. It also doesn't show what would happen if 2 or more consumers are consuming messages for the same topic.
+
+***`__consumer_offsets`*** is a special topic that keeps track of messages read by each consumer and topic. In other words: _Kafka uses itself_ to keep track of what consumers do.
+
+When a consumer reads messages and Kafka receives the ack, Kafka posts a message to `__consumer_offsets` with the consumer ID, the topic and the message IDs that the consumer has read. If the consumer dies and spawns again, Kafka will know the last message delivered to it in order to resume sending new ones. If multiple consumers are present, Kafka knows which consumers have read which messages, so a message that has been read by consumer #1 but not by #2 can still be sent to #2.
+
+### Consumer Groups
+
+A ***consumer group*** is composed of multiple consumers.
+
+In regards of controlling read messages, Kafka treats all the consumers inside a consumer group as a _single entity_: when a consumer inside a group reads a message, that message will ***NOT*** be delivered to any other consumer in the group.
+
+Consumer groups allow consumer apps to scale independently: a consumer app made of multiple consumer nodes will not have to deal with duplicated or redundant messages.
+
+Consumer groups have IDs and all consumers within a group have IDs as well.
+
+The default value for consumer groups is 1. All consumers belong to a consumer group.
 
