@@ -130,6 +130,8 @@ When a consumer reads messages and Kafka receives the ack, Kafka posts a message
 
 A ***consumer group*** is composed of multiple consumers.
 
+When we create a ***consumer*** application, we generally end up creating a ***consumer group*** as well, and we specify a ***consumer group ID*** with it. 
+
 In regards of controlling read messages, Kafka treats all the consumers inside a consumer group as a _single entity_: when a consumer inside a group reads a message, that message will ***NOT*** be delivered to any other consumer in the group.
 
 Consumer groups allow consumer apps to scale independently: a consumer app made of multiple consumer nodes will not have to deal with duplicated or redundant messages.
@@ -137,4 +139,78 @@ Consumer groups allow consumer apps to scale independently: a consumer app made 
 Consumer groups have IDs and all consumers within a group have IDs as well.
 
 The default value for consumer groups is 1. All consumers belong to a consumer group.
+
+Advantages of Consumer Groups
+- Tells Kafka that all the consumers in a particular group are only one entity, and as a result Kafka treats them as one entity
+	- Treats all the Consumers in a Consumer Group as one Consumer consuming message from a particular Topic
+- If Consumer One receives a message and acknowledges it, then Consumer Two will not get the same message
+	- And at the same time Consumer Two can be receiving another message from the same Topic and so on
+- This is beneficial for us as we can scale inside the consumer group
+	- We are able to scale our consumer application horizontally
+
+### Partitions
+	
+>Note: do not confuse BigQuery or Spark partitions with Kafka partitions; they are different concepts.
+
+`Partitioning` in `Kafka` is used for ***scalability*** purposes
+
+Topic logs in Kafka can be ***partitioned***. A topic is essentially a _wrapper_ around (different partitions) at least 1 partition.
+
+Partitions are assigned to consumers inside consumer groups:
+* ***A partition*** is assigned to ***one consumer only***.
+* ***One consumer*** may have ***multiple partitions*** assigned to it.
+* If a consumer dies, the partition is reassigned to another consumer.
+* Ideally there should be as many partitions as consumers in the consumer group.
+    * If there are more partitions than consumers, some consumers will receive messages from multiple partitions.
+    * If there are more consumers than partitions, the extra consumers will be idle with nothing to do.
+
+Partitions in Kafka, along with consumer groups, are a scalability feature. Increasing the amount of partitions allows the consumer group to increase the amount of consumers in order to read messages at a faster rate. Partitions for one topic may be stored in separate Kafka brokers in our cluster as well.
+
+Messages are assigned to partitions inside a topic by means of their ***key***: message keys are hashed and the hashes are then divided by the amount of partitions for that topic; the remainder of the division is determined to assign it to its partition. In other words: _hash modulo partition amount_.
+* While it would be possible to store messages in different partitions in a round-robin way, this method would not keep track of the _message order_.
+* Using keys for assigning messages to partitions has the risk of making some partitions bigger than others. For example, if the topic `client` makes use of client IDs as message keys and one client is much more active than the others, then the partition assigned to that client will grow more than the others. In practice however this is not an issue and the advantages outweight the cons.
+
+```mermaid
+flowchart LR
+    p(producer)
+    subgraph c[Cluster]
+        subgraph m[Messages]
+            ka[[key a]]
+            kb[[key b]]
+            kc[[key c]]
+        end
+        subgraph t[Topic]
+            pa[partition A]
+            pb[partition B]
+            pc[partition C]
+        end
+        ka --> pa
+        kb --> pb
+        kc --> pc
+    end
+    subgraph g[Consumer group]
+        c1(consumer)
+        c2(consumer)
+    end
+    p-->ka & kb & kc
+    pa --> c1
+    pb --> c2
+    pc --> c2
+```
+
+### Replication
+	Helps us in fault tolerance in Kafka
+
+
+Partitions are ***replicated*** across multiple brokers in the Kafka cluster as a fault tolerance precaution.
+
+When a partition is replicated across multiple brokers, one of the brokers becomes the ***leader*** for that specific partition. The leader handles the message and writes it to its partition log. The partition log is then replicated to other brokers, which contain ***replicas*** for that partition. Replica partitions should contain the same messages as leader partitions.
+
+If a broker which contains a leader partition dies, another broker becomes the leader and picks up where the dead broker left off, thus guaranteeing that both producers and consumers can keep posting and reading messages.
+
+When a `message` is being written to a particular partition or a `topic`, it is also being replicated across different brokers in a Kafka Cluster. 
+- This is done so that if Broker 0 (leader for partition 0) dies, Broker 1 (leader for partition 1) can then act as the leader for partition 0
+- And consumers and producers can continue consuming and producing to and from the topic 
+
+We can define the _replication factor_ of partitions at topic level. A replication factor of 1 (no replicas) is undesirable, because if the leader broker dies, then the partition becomes unavailable to the whole system, which could be catastrophic in certain applications.
 
