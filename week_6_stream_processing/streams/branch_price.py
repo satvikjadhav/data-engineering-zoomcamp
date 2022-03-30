@@ -2,7 +2,7 @@ import faust
 from taxi_rides import TaxiRide
 from faust import current_event
 
-app = faust.App('de.stream.v3', broker='kafka://localhost:9092', consumer_auto_offset_reset="earliest")
+app = faust.App('de.stream.v4', broker='kafka://localhost:9092', consumer_auto_offset_reset="earliest")
 topic = app.topic('de.yellow_taxi_ride.json', value_type=TaxiRide)
 
 high_amount_rides = app.topic('de.yellow_taxi_rides.high_amount')

@@ -5,3 +5,7 @@
 /week_2_data_ingestion/airflow/logs
 /week_3_data_warehouse/airflow/logs
 /week_4_analytics_engineering/dbt/dbt/logs
+/de.stream.v2-data
+/de.stream.v3-data
+/de.stream.v4-data
+/de.stream.v5-data
