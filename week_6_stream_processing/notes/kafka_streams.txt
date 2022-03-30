@@ -1,0 +1,84 @@
+# Kafka Streams
+	The idea is to process all the messages in a streaming fashion with milliseconds delay and not have a consumer mindset where we are consuming bulk of messages. 
+
+## What is Kafka Streams?
+	- Client library for building stream application
+	- Data from Kafka to Kafka
+	- Stream application
+		- Fault tolerant
+		- Scalable
+	- Event processing with milliseconds latency
+	- Provides a convenient DSL
+
+
+[Kafka Streams](https://kafka.apache.org/documentation/streams/) is a _client library_ for building applications and services whose input and output are stored in Kafka clusters. In other words: _Streams applications_ consume data from a Kafka topic and produce it back into another Kafka topic.
+
+Kafka Streams is fault-tolerant and scalable, and apps using the Streams library benefit from these features: new instances of the app can be added or killed and Kafka will balance the load accordingly. Streams can process events with latency of miliseconds, making it possible for applications to deal with messages as soon as they're available. Streams also provides a convenient [Domain Specific Language (Streams DSL)](https://docs.confluent.io/platform/current/streams/developer-guide/dsl-api.html) that simplifies the creation of Streams services.
+
+Kafka Streams is both powerful and simple to use. Other solutions like Spark or Flink are considered more powerful but they're much harder to use, and simple Kafka consumers (like the ones we've created so far) are simple but not as powerful as apps using Streams. However, keep in mind that Streams apps can only work with Kafka; if you need to deal with other sources then you need other solutions.
+
+ ## Streams vs State
+
+When dealing with streaming data, it's important to make the disctinction between these 2 concepts:
+
+* ***Streams*** (aka ***KStreams***) are _individual messages_ that are read sequentially.
+* ***State*** (aka ***KTable***) can be thought of as a _stream changelog_: essentially a table which contains a _view_ of the stream at a specific point of time.
+    * KTables are also stored as topics in Kafka.
+
+![source: https://timothyrenner.github.io/engineering/2016/08/11/kafka-streams-not-looking-at-facebook.html](06_04.png)
+
+## Streams Topologies and Features
+
+A ***topology*** (short for _processor topology_) defines the _stream computational logic_ for our app. In other words, it defines how input data is transformed into output data.
+
+Essentially, a topology is a graph of _stream processors_ (the graph nodes) which are connected by _streams_ (the graph edges). A topology is a useful abstraction to design and understand Streams applications.
+
+A ***stream processor*** is a node which represents a processing step (i.e. it transforms data), such as map, filter, join or aggregation.
+
+Stream processors (and thus topologies) are defined via the imperative Processor API or with the declarative, functional DSL. We will focus on DSL in this lesson.
+
+Kafka Streams provides a series of features which stream processors can take advantage of, such as:
+* Aggregates (count, groupby)
+* Stateful processing (stored internally in a Kafka topic)
+* Joins (KStream with Kstream, KStream with KTable, Ktable with KTable)
+* [Windows](https://kafka.apache.org/20/documentation/streams/developer-guide/dsl-api.html#windowing) (time based, session based)
+    * A window is a group of records that have the same key, meant for stateful operations such as aggregations or joins.
+
+## Kafka Streams Demo - Intro
+
+The native language to develop for Kafka Streams is Scala; we will use the [Faust library](https://faust.readthedocs.io/en/latest/) instead because it allows us to create Streams apps with Python.
+
+1. `producer_tax_json.py` ([link](../week_6_stream_processing/streams/producer_taxi_json.py)) will be the main producer.
+    * Instead of sending Avro messages, we will send simple JSON messages for simplicity.
+    * We instantiate a `KafkaProducer` object, read from the CSV file used in the previous block, create a key with `numberId` matching the row of the CSV file and the value is a JSON object with the values in the row.
+    * We post to the `datatalkclub.yellow_taxi_ride.json` topic.
+        * You will need to create this topic in the Control Center.
+    * One message is sent per second, as in the previous examples.
+    
+1. `stream.py` ([link](../week_6_stream_processing/streams/stream.py)) is the actual Faust application.
+    * We first instantiate a `faust.App` object which declares the _app id_ (like the consumer group id) and the Kafka broker which we will talk to.
+    * We also define a topic, which is `datatalkclub.yellow_taxi_ride.json`.
+        * The `value_types` param defines the datatype of the message value; we've created a custom `TaxiRide` class for it which is available [in this `taxi_ride.py` file](../week_6_stream_processing/streams/taxi_rides.py)
+    * We create a _stream processor_ called `start_reading()` using the `@app.agent()` decorator.
+        * In Streams, and ***agent*** is a group of ***actors*** processing a stream, and an _actor_ is an individual instance.
+        * We use `@app.agent(topic)` to point out that the stream processor will deal with our `topic` object.
+        * `start_reading(records)` receives a stream named `records` and prints every message in the stream as it's received.
+        * Finally, we call the `main()` method of our `faust.App` object as an entry point.
+    * You will need to run this script as `python stream.py worker` .
+1. `stream_count_vendor_trips.py` ([link](../week_6_stream_processing/streams/stream_count_vendor_trips.py)) is another Faust app that showcases creating a state from a stream:
+    * Like the previous app, we instantiate an `app` object and a topic.
+    * We also create a KTable with `app.Table()` in order to keep a state:
+        * The `default=int` param ensures that whenever we access a missing key in the table, the value for that key will be initialized as such (since `int()` returns 0, the value will be initialized to 0).
+    * We create a stream processor called `process()` which will read every message in `stream` and write to the KTable.
+        * We use `group_by()` to _repartition the stream_ by `TaxiRide.vendorId`, so that every unique `vendorId` is delivered to the same agent instance.
+        * We write to the KTable the number of messages belonging to each `vendorId`, increasing the count by one each time we read a message. By using `group_by` we make sure that the KTable that each agent handles contains the correct message count per each `vendorId`.
+    * You will need to run this script as `python stream_count_vendor_trips.py worker` .
+* `branch_price.py` ([link](../week_6_stream_processing/streams/branch_price.py)) is a Faust app that showcases ***branching***:
+	* What we want to achieve is to consume some messages from our yellow taxi ride json, then publish it into a different topic based on some defined conditions
+    * We start by instancing an app object and a _source_ topic which is, as before, `datatalkclub.yellow_taxi_ride.json`.
+    * We also create 2 additional new topics: `datatalks.yellow_taxi_rides.high_amount` and `datatalks.yellow_taxi_rides.low_amount`
+    * In our stream processor, we check the `total_amount` value of each message and ***branch***:
+        * If the value is below the `40` threshold, the message is reposted to the `datatalks.yellow_taxi_rides.low_amount` topic.
+        * Otherwise, the message is reposted to `datatalks.yellow_taxi_rides.high_amount`.
+    * You will need to run this script as `python branch_price.py worker` .
+
