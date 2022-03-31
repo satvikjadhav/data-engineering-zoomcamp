@@ -82,3 +82,50 @@ The native language to develop for Kafka Streams is Scala; we will use the [Faus
         * Otherwise, the message is reposted to `datatalks.yellow_taxi_rides.high_amount`.
     * You will need to run this script as `python branch_price.py worker` .
 
+## Joins in Streams
+
+Streams support the following Joins:
+* ***Outer***
+* ***Inner***
+* ***Left***
+
+Tables and streams can also be joined in different combinations:
+* ***Stream to stream join*** - always ***windowed*** (you need to specify a certain timeframe).
+* ***Table to table join*** - always NOT windowed.
+* ***Stream to table join***.
+
+You may find out more about how they behave [in this link](https://blog.codecentric.de/en/2017/02/crossing-streams-joins-apache-kafka/).
+
+The main difference is that joins between streams are _windowed_ ([see below](#windowing)), which means that the joins happen between the "temporal state" of the window, whereas joins between tables aren't windowed and thus happen on the actual contents of the tables.
+
+## Timestamps (Time Concept)
+
+So far we have covered the key and value attributes of a Kafka message but we have not covered the timestamp.
+
+Every event has an associated notion of time. Kafka Streams bases joins and windows on these notions. We actually have multiple timestamps available depending on our use case:
+* ***Event time*** (extending `TimestampExtractor`): timestamp built into the message which we can access and recover.
+* ***Processing time***: timestamp in which the message is processed by the stream processor.
+* ***Ingestion time***: timestamp in which the message was ingested into its Kafka broker.
+
+## Windowing
+
+In Kafka Streams, ***windows*** refer to a time reference in which a series of events happen.
+
+There are 2 main kinds of windows:
+
+* ***Time-based windows***
+    * ***Fixed/tumbling***: windows have a predetermined size (in seconds or whichever time unit is adequate for the use case) and don't overlap - each window happens one after another.
+    * ***Sliding***: windows have a predetermined size but there may be multiple "timelines" (or _slides_) happening at the same time. Windows for each slide have consecutive windows.
+* ***Session-based windows***: windows are based on keys rather than absolute time. When a key is received, a _session window_ starts for that key and ends when needed. Multiple sessions may be open simultaneously.
+
+This is very useful when we want to find out something like: 
+- How many rides is the vendor selling per hour/minute/second
+
+## Kafka Streams demo (2) - Windowing
+
+Let's now see an example of windowing in action.
+
+* `windowing.py` ([link](../week_6_stream_processing/streams/windowing.py)) is a very similar app to `stream_count_vendor_trips.py` but defines a ***tumbling window*** for the table.
+    * The window will be of 1 minute in length.
+    * When we run the app and check the window topic in Control Center, we will see that each key (one per window) has an attached time interval for the window it belongs to and the value will be the key for each received message during the window.
+    * You will need to run this script as `python windowing.py worker` .
