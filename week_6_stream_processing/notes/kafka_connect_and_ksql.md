@@ -2,7 +2,9 @@
 
 [Kafka Connect](https://docs.confluent.io/platform/current/connect/index.html#:~:text=Kafka%20Connect%20is%20a%20free,Kafka%20Connect%20for%20Confluent%20Platform.) is a tool which allows us to stream data between external applications and services to/from Kafka. It works by defining ***connectors*** which external services connect to. Services from which data is pulled from are called ***sources*** and services which we send data to are called ***sinks***.
 
-![kafla connect](images/06_08.png)
+The biggest advantage of using Kafka Connect is that we do not really have to code anything and we can use existing connector and add our configuration for our use case. 
+
+![kafka connect](images/06_08.png)
 
 _[Back to the top](#)_
 
