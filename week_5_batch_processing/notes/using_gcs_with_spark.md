@@ -5,9 +5,9 @@ To upload any file or folder from our Google VM to our Google Cloud Storage, we 
 gsutil cp -m -r pq/ gs://dtc_data_lake_data-engineering-339113/pq
 ```
 
-Here the following flags are: 
-**r**: for recursive flag. We want to upload all the files in a folder
-**m**: multi threaded. We want to upload the files in parallel so the process will be faster 
+Here the following flags are:
+- **r**: for recursive flag. We want to upload all the files in a folder
+- **m**: multi threaded. We want to upload the files in parallel so the process will be faster 
 
 ## Connect to Google Cloud Storage
 
