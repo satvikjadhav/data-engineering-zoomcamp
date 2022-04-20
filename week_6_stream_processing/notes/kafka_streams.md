@@ -48,24 +48,24 @@ Kafka Streams provides a series of features which stream processors can take adv
 
 The native language to develop for Kafka Streams is Scala; we will use the [Faust library](https://faust.readthedocs.io/en/latest/) instead because it allows us to create Streams apps with Python.
 
-1. `producer_tax_json.py` ([link](../week_6_stream_processing/streams/producer_taxi_json.py)) will be the main producer.
+1. `producer_tax_json.py` ([link](../streams/producer_taxi_json.py)) will be the main producer.
     * Instead of sending Avro messages, we will send simple JSON messages for simplicity.
     * We instantiate a `KafkaProducer` object, read from the CSV file used in the previous block, create a key with `numberId` matching the row of the CSV file and the value is a JSON object with the values in the row.
     * We post to the `datatalkclub.yellow_taxi_ride.json` topic.
         * You will need to create this topic in the Control Center.
     * One message is sent per second, as in the previous examples.
     
-1. `stream.py` ([link](../week_6_stream_processing/streams/stream.py)) is the actual Faust application.
+1. `stream.py` ([link](../streams/stream.py)) is the actual Faust application.
     * We first instantiate a `faust.App` object which declares the _app id_ (like the consumer group id) and the Kafka broker which we will talk to.
     * We also define a topic, which is `datatalkclub.yellow_taxi_ride.json`.
-        * The `value_types` param defines the datatype of the message value; we've created a custom `TaxiRide` class for it which is available [in this `taxi_ride.py` file](../week_6_stream_processing/streams/taxi_rides.py)
+        * The `value_types` param defines the datatype of the message value; we've created a custom `TaxiRide` class for it which is available [in this `taxi_ride.py` file](../streams/taxi_rides.py)
     * We create a _stream processor_ called `start_reading()` using the `@app.agent()` decorator.
         * In Streams, and ***agent*** is a group of ***actors*** processing a stream, and an _actor_ is an individual instance.
         * We use `@app.agent(topic)` to point out that the stream processor will deal with our `topic` object.
         * `start_reading(records)` receives a stream named `records` and prints every message in the stream as it's received.
         * Finally, we call the `main()` method of our `faust.App` object as an entry point.
     * You will need to run this script as `python stream.py worker` .
-1. `stream_count_vendor_trips.py` ([link](../week_6_stream_processing/streams/stream_count_vendor_trips.py)) is another Faust app that showcases creating a state from a stream:
+1. `stream_count_vendor_trips.py` ([link](../streams/stream_count_vendor_trips.py)) is another Faust app that showcases creating a state from a stream:
     * Like the previous app, we instantiate an `app` object and a topic.
     * We also create a KTable with `app.Table()` in order to keep a state:
         * The `default=int` param ensures that whenever we access a missing key in the table, the value for that key will be initialized as such (since `int()` returns 0, the value will be initialized to 0).
@@ -73,7 +73,7 @@ The native language to develop for Kafka Streams is Scala; we will use the [Faus
         * We use `group_by()` to _repartition the stream_ by `TaxiRide.vendorId`, so that every unique `vendorId` is delivered to the same agent instance.
         * We write to the KTable the number of messages belonging to each `vendorId`, increasing the count by one each time we read a message. By using `group_by` we make sure that the KTable that each agent handles contains the correct message count per each `vendorId`.
     * You will need to run this script as `python stream_count_vendor_trips.py worker` .
-* `branch_price.py` ([link](../week_6_stream_processing/streams/branch_price.py)) is a Faust app that showcases ***branching***:
+* `branch_price.py` ([link](../streams/branch_price.py)) is a Faust app that showcases ***branching***:
 	* What we want to achieve is to consume some messages from our yellow taxi ride json, then publish it into a different topic based on some defined conditions
     * We start by instancing an app object and a _source_ topic which is, as before, `datatalkclub.yellow_taxi_ride.json`.
     * We also create 2 additional new topics: `datatalks.yellow_taxi_rides.high_amount` and `datatalks.yellow_taxi_rides.low_amount`
@@ -125,7 +125,7 @@ This is very useful when we want to find out something like:
 
 Let's now see an example of windowing in action.
 
-* `windowing.py` ([link](../week_6_stream_processing/streams/windowing.py)) is a very similar app to `stream_count_vendor_trips.py` but defines a ***tumbling window*** for the table.
+* `windowing.py` ([link](../streams/windowing.py)) is a very similar app to `stream_count_vendor_trips.py` but defines a ***tumbling window*** for the table.
     * The window will be of 1 minute in length.
     * When we run the app and check the window topic in Control Center, we will see that each key (one per window) has an attached time interval for the window it belongs to and the value will be the key for each received message during the window.
     * You will need to run this script as `python windowing.py worker` .

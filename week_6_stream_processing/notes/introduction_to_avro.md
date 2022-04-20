@@ -160,13 +160,13 @@ We will now create a demo in which we will see a schema registry and Avro in act
 
 ### `docker-compose.yml`
 
-In the [docker compose file we used in the previous demo](../week_6_stream_processing/docker-compose.yml) there's a `schema-registry` service that uses [Confluent's Schema Registry](https://docs.confluent.io/platform/current/schema-registry/). The docker container will run locally and bind to port 8081, which we will make use of in the following scripts.
+In the [docker compose file we used in the previous demo](../docker-compose.yml) there's a `schema-registry` service that uses [Confluent's Schema Registry](https://docs.confluent.io/platform/current/schema-registry/). The docker container will run locally and bind to port 8081, which we will make use of in the following scripts.
 
 ### Defining schemas
 
 Schemas are defined using JSON syntax and saved to `asvc` files. We will define 2 schemas: a schema for the ***message key*** and another for the ***message value***.
 
-* The ***message key schema*** contains basic info that allows us to identify the message. You can download the complete `taxi_ride_key.avsc` file [from this link](../week_6_stream_processing/avro/taxi_ride_key.avsc).
+* The ***message key schema*** contains basic info that allows us to identify the message. You can download the complete `taxi_ride_key.avsc` file [from this link](../avro/taxi_ride_key.avsc).
     ```json
     {
         "namespace": "com.datatalksclub.taxi",
@@ -180,12 +180,12 @@ Schemas are defined using JSON syntax and saved to `asvc` files. We will define 
         ]
     }
     ```
-* The ***message value schema*** defines the schema of the actual info we will be sending. For this example, we have created a `taxi_ride_value.avsc` file that you can download [from this link](../week_6_stream_processing/avro/taxi_ride_value.avsc) which contains a few primitive data types.
-    * This schema is to be used with [the `rides.csv` file](../week_6_stream_processing/avro/data/rides.csv) which contains a few taxi rides already prepared for the example.
+* The ***message value schema*** defines the schema of the actual info we will be sending. For this example, we have created a `taxi_ride_value.avsc` file that you can download [from this link](../avro/taxi_ride_value.avsc) which contains a few primitive data types.
+    * This schema is to be used with [the `rides.csv` file](../avro/data/rides.csv) which contains a few taxi rides already prepared for the example.
 
 ### Producer
 
-We will create a [`producer.py` file](../week_6_stream_processing/avro/producer.py) that will do the following:
+We will create a [`producer.py` file](../avro/producer.py) that will do the following:
 * Import the `avro` and `avroProducer` libraries from `confluent_kafka`.
 * Define a `load_avro_schema_from_file()` function which reads the 2 schema files we defined above.
 * In the main `send_record()` method:
@@ -199,7 +199,7 @@ We will create a [`producer.py` file](../week_6_stream_processing/avro/producer.
 
 ### Consumer
 
-We will also create a [`consumer.py` file](../week_6_stream_processing/avro/consumer.py) that will do the following:
+We will also create a [`consumer.py` file](../avro/consumer.py) that will do the following:
 * Imports `AvroConsumer` from `confluent_kafka.avro`.
 * Defines the necessary consumer settings (kafka and registry URLs, consumer group id and auto offset reset policy).
 * Instantiates an `AvroConsumer` object and subscribes to the `datatalkclub.yellow_taxi_rides` topic.
