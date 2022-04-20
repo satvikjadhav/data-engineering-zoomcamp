@@ -62,4 +62,8 @@
 - [Using GCS with Spark](week_5_batch_processing/notes/using_gcs_with_spark.md)
 
 ### Week 6: Stream Processing
-Coming soon
+- [Intro to Kafka](week_6_stream_processing/notes/intro_to_kafka.md)
+- [Intro to Avro](week_6_stream_processing/notes/introduction_to_avro.md)
+- [Kafka Config](week_6_stream_processing/notes/kafka_config.md)
+- [Kafka Streams](week_6_stream_processing/notes/kafka_streams.md)
+- [Kafka Connect and KSQL](week_6_stream_processing/notes/kafka_connect_and_ksql.md)

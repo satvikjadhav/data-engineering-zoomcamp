@@ -45,7 +45,7 @@ _[Video source](https://www.youtube.com/watch?v=Erf1-d1nyMY&list=PL3MmuxUbc_hJed
 
 Install instructions for Kafka can be found in [the official website](https://kafka.apache.org/quickstart#quickstart_kafkaconnect).
 
-Due to the complexity of managing a manual Kafka install, a docker-compose script is provided [in this link](../week_6_stream_processing/docker-compose.yml). The Docker images are provided by [Confluent](https://www.confluent.io/), a Kafka tool vendor. The script defines the following services:
+Due to the complexity of managing a manual Kafka install, a docker-compose script is provided [in this link](../docker-compose.yml). The Docker images are provided by [Confluent](https://www.confluent.io/), a Kafka tool vendor. The script defines the following services:
 
 * **[`zookeeper`](https://zookeeper.apache.org/)**: a centralized service for maintaining configuration info. Kafka uses it for maintaining metadata knowledge such as topic partitions, etc.
     * Zookeeper is being phased out as a dependency, but for easier deployment we will use it in the lesson.
@@ -63,11 +63,11 @@ Download the script to your work directory and start the deployment with `docker
 We will now create a demo of a Kafka system with a producer and a consumer and see how messages are created and consumed.
 
 1. In the Control Center GUI, select the `Cluster 1` cluster and in the topic section, create a new `demo_1` topic with 2 partitions and default settings.
-2. Copy the [`requirements.txt`](../week_6_stream_processing/requirements.txt) to your work folder and [create a Python virtual environment](https://gist.github.com/ziritrion/8024025672ea92b8bdeb320d6015aa0d). You will need to run all the following scripts in this environment.
-3. Copy the [`producer.py`](../week_6_stream_processing/producer.py) script to your work folder. Edit it and make sure that the line `producer.send('demo_1', value=data)` (it should be line 12 on an unmodified file) is set to `demo_1`. Run the script and leave it running in a terminal.
+2. Copy the [`requirements.txt`](../requirements.txt) to your work folder and [create a Python virtual environment](https://gist.github.com/ziritrion/8024025672ea92b8bdeb320d6015aa0d). You will need to run all the following scripts in this environment.
+3. Copy the [`producer.py`](../producer.py) script to your work folder. Edit it and make sure that the line `producer.send('demo_1', value=data)` (it should be line 12 on an unmodified file) is set to `demo_1`. Run the script and leave it running in a terminal.
     * This script registers to Kafka as a producer and sends a message each second until it sends 1000 messages.
     * With the script running, you should be able to see the messages in the Messages tab of the `demo_1` topic window in Control Center.
-4. Copy the [`consumer.py`](../week_6_stream_processing/consumer.py) script to your work folder. Edit it and make sure that the first argument of `consumer = KafkaConsumer()` is `'demo_1',` (in an unmodified script this should be in line 6) and the `group_id` value should be `'consumer.group.id.demo.1'`
+4. Copy the [`consumer.py`](../consumer.py) script to your work folder. Edit it and make sure that the first argument of `consumer = KafkaConsumer()` is `'demo_1',` (in an unmodified script this should be in line 6) and the `group_id` value should be `'consumer.group.id.demo.1'`
     * This script registers to Kafka as a consumer and continuously reads messages from the topic, one message each second.
 5. Run the `consumer.py` script on a separate terminal from `producer.py`. You should see the consumer read the messages in sequential order. Kill the consumer and run it again to see how itaa resumes from the last read message.
 6. With the `consumer.py` running, modify the script and change `group_id` to `'consumer.group.id.demo.2'`. Run the script on a separate terminal; you should now see how it consumes all messages starting from the beginning because `auto_offset_reset` is set to `earliest` and we now have 2 separate consumer groups accessing the same topic.
